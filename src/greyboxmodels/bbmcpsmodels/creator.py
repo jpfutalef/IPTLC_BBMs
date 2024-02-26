@@ -31,16 +31,24 @@ def get_device():
     return torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
 
-def setup_datasets(datasets_folder, dataset_name, remove_nans=True, ratios=(0.70, 0.15, 0.15), batch_size=32):
-    dataset_folder = datasets_folder / dataset_name
+def setup_datasets(dataset_folder,
+                   dataset_name,
+                   remove_nans=True,
+                   ratios=(0.70, 0.15, 0.15),
+                   batch_size=32,
+                   input_name="inputs.npy",
+                   output_name="outputs.npy",
+                   dataset_name_is_folder=False):
+    if dataset_name_is_folder:
+        dataset_folder = dataset_folder / dataset_name
     dataset_metadata = DatasetMetadata(name=dataset_name)
 
     # Print the dataset name
     print(f"Loading: {dataset_folder}")
 
     # Load the data
-    X_np = np.load(dataset_folder / "inputs.npy")
-    Y_np = np.load(dataset_folder / "outputs.npy")
+    X_np = np.load(dataset_folder / input_name)
+    Y_np = np.load(dataset_folder / output_name)
 
     print("---- Dataset loaded ----")
     print(f"Input shape: {X_np.shape}")
