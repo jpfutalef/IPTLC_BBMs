@@ -31,7 +31,7 @@ class BBM2_DeepNN(nn.Module):
         self.fc1 = nn.Linear(input_size, 500)
         self.fc2 = nn.Linear(500, 250)
         self.fc3 = nn.Linear(250, 125)
-        self.fc4 = nn.Linear(125, 9)
+        self.fc4 = nn.Linear(125, output_size)
 
         # Dropout layer
         self.dropout = nn.Dropout(p=dropout)

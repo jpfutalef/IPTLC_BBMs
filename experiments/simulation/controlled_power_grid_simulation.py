@@ -12,12 +12,12 @@ import greyboxmodels.cpsmodels.physical.electrical.cases as pg_cases
 import greyboxmodels.cpsmodels.physical.electrical.data_utils as pg_data_utils
 import greyboxmodels.cpsmodels.Input as Input
 import greyboxmodels.cpsmodels.cyberphysical.ControlledPowerGrid.ControlledPowerGrid as cpg
-import greyboxmodels.bbmcpsmodels.nn.feedforward as nn_ff
+import greyboxmodels.bbmcpsmodels.nn.feedforward_opf as nn_ff
 
 warnings.filterwarnings('ignore')
 
 # Set the working directory to the root of the project
-os.chdir('D:/projects/IPTLC_BBMs')
+os.chdir('/')
 print(f'Working directory: {os.getcwd()}')
 
 # In[5]:
@@ -50,7 +50,7 @@ plant = cpg_cases.case14(cc_type="data-driven",
 plant.control_center.normalization_spec = norm_specs
 
 # Load the external stimuli
-ext_sti, ext_sti_std = pg_data_utils.pq_load_from_day_curves('D:/projects/Hierarchical_CPS_models/data/Terna/one_week_Thursday.csv',
+ext_sti, ext_sti_std = pg_data_utils.pq_load_from_day_curves('/data/Terna/one_week_Thursday.csv',
                                                              mission_time,
                                                              dt,
                                                              pg_cases.get_case14_loads(),
