@@ -30,9 +30,9 @@ class DataDrivenControlCenter(ControlCenter):
         # Move the model to the device
         self.opf_bbm.to(self.device)
 
-    def optimal_power_flow(self, Pd, Qd, Vg_m, Vg_a, piGen, piLine, piTrafo, opf_opts=None):
+    def optimal_power_flow(self, Pd, Qd, Vg_m, piGen, piLine, piTrafo, opf_opts=None):
         # Create the input vector
-        x = np.concatenate([Pd, Qd, Vg_m, Vg_a, piGen, piLine, piTrafo])
+        x = np.concatenate([Pd, Qd, Vg_m, piGen, piLine, piTrafo])
 
         # Normalize the inputs
         x = self.normalize(x)
