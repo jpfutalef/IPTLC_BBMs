@@ -51,8 +51,8 @@ def setup_datasets(dataset_folder,
     Y_np = np.load(dataset_folder / output_name)
 
     print("---- Dataset loaded ----")
-    print(f"Input shape: {X_np.shape}")
-    print(f"Output shape: {Y_np.shape}")
+    print(f"    Input shape: {X_np.shape}")
+    print(f"    Output shape: {Y_np.shape}")
 
     # Remove NaNs
     if remove_nans:
@@ -63,13 +63,13 @@ def setup_datasets(dataset_folder,
 
         # Delete in X and Y the rows with NaNs
         rows_to_delete = np.union1d(X_nan_rows, Y_nan_rows)
-        print(f"Rows to delete: {rows_to_delete}")
+        print(f"    Rows to delete: {rows_to_delete}")
 
         X_np = np.delete(X_np, rows_to_delete, axis=0)
         Y_np = np.delete(Y_np, rows_to_delete, axis=0)
 
-        print(f"Input shape: {X_np.shape}")
-        print(f"Output shape: {Y_np.shape}")
+        print(f"    Input shape: {X_np.shape}")
+        print(f"    Output shape: {Y_np.shape}")
 
     # Convert to torch tensors
     print("---- Converting to torch tensors ----")
