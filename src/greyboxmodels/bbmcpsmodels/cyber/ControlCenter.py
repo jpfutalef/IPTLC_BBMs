@@ -41,13 +41,13 @@ class DataDrivenControlCenter(ControlCenter):
         input_tensor = torch.tensor(x, dtype=torch.float32, device=self.device)
 
         # Run the model
-        x = self.opf_bbm(input_tensor.float())
+        y = self.opf_bbm(input_tensor.float())
 
         # Denormalize the output
-        x = x.cpu().detach().numpy()
-        x = self.denormalize(x)
+        y = y.cpu().detach().numpy()
+        y = self.denormalize(y)
 
-        return x
+        return y
 
     def normalize(self, x):
         if self.normalization_spec is None:
