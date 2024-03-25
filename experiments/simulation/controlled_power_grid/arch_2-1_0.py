@@ -20,9 +20,11 @@ import pandas as pd
 import tqdm
 
 import greyboxmodels.cpsmodels.Input as Input
-import greyboxmodels.cpsmodels.cyberphysical.ControlledPowerGrid.cases as cpg_cases
+import greyboxmodels.cpsmodels.cyberphysical.ControlledPowerGrid.ControlledPowerGrid as CPG
+import greyboxmodels.cpsmodels.physical.electrical.cases as cpg_cases
+import greyboxmodels.cpsmodels.cyber.ControlCenter as CC
+import greyboxmodels.bbmcpsmodels.physical.feedforward_nn_pf as pf_bbm
 from greyboxmodels.scenariogeneration.MonteCarlo import MonteCarlo
-from greyboxmodels.bbmcpsmodels.cyber import feedforward_nn_opf as opf_bbm
 
 warnings.filterwarnings('ignore')
 
@@ -32,21 +34,34 @@ SIM_STEP_TIME = 15 * 60
 SIM_INITIAL_TIME = 0.
 MAX_EXECUTION_TIME = 3600 * 8
 
-# Load the case
+#%% Create the plant
+
+# Power grid
+POWER_GRID = cpg_cases.case14("data-driven")
+
+# Load the BBM PF
 PF_BBM = pf_bbm.BBM1_SimpleNet(52, 10)
 PF_BBM.load_state_dict(torch.load("models/BBM1_SimpleNet_MinMaxNormalizedOPF_20240321-163701.pt"))
 
-# OPF_BBM = opf_bbm.BBM2_DeepNN(52, 10)
-# OPF_BBM.load_model("models\BBM2-deep_MinMaxNormalizedOPF_20240321-164224.pt")
+# Get the normalization spec
+with open("data/IO-datasets/OPF/2024-03-20_18-55-20/norm_min_max_values.pkl", "rb") as f:
+    NORMALIZATION_SPEC = pickle.load(f)
 
-# Get the name of the OPF BBM
-OPF_BBM_NAME = OPF_BBM.__class__.__name__
+# Pass to the plant
+POWER_GRID.set_bbm(PF_BBM, NORMALIZATION_SPEC)
 
-# The path
-SAVE_TO = f"data/monte_carlo/controlled_power_grid/arch_1-0_1/{OPF_BBM_NAME}/{time.strftime('%Y-%m-%d_%H-%M-%S')}"
+# Control center
+CONTROL_CENTER = CC.ControlCenter(POWER_GRID)
 
 # Set the plant
-SIM_PLANT = cpg_cases.case14(cc_type="data-driven", opf_bbm=OPF_BBM)
+SIM_PLANT = CPG.ControlledPowerGrid(POWER_GRID, CONTROL_CENTER)
+
+# Get the name of the OPF BBM
+PF_BBM_NAME = PF_BBM.__class__.__name__
+
+# The path
+SAVE_TO = f"data/monte_carlo/controlled_power_grid/arch_1-1_0/{PF_BBM_NAME}/{time.strftime('%Y-%m-%d_%H-%M-%S')}"
+
 
 #%% Get initial condition and stimuli from WBM simulations
 WBM_simulation_folder = "D:/projects/CPS-SenarioGeneration/data/monte_carlo/controlled_power_grid/2024-03-20_18-55-20/"
@@ -56,7 +71,6 @@ WBM_simulation_folder = Path(WBM_simulation_folder)
 with open(WBM_simulation_folder / "report.pkl", "rb") as f:
     report = pickle.load(f)
 
-# Get the number of simulations
 #%% Iterate all files and obtain realizations of the external stimuli
 print("Loading external stimuli realizations...")
 locs = [x for x in WBM_simulation_folder.iterdir() if x.is_file() and x.suffix == ".pkl" and "simulation" in x.stem]
