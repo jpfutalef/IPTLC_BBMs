@@ -1,3 +1,5 @@
+import os
+
 import numpy as np
 from pathlib import Path
 import dill as pickle
@@ -24,6 +26,9 @@ def ks_statistic(ecdf_1, ecdf_2):
     float
         The Kolmogorov-Smirnov statistic.
     """
+    # Remove NaNs
+    ecdf_1 = ecdf_1.copy()[~np.isnan(ecdf_1)]
+    ecdf_2 = ecdf_2.copy()[~np.isnan(ecdf_2)]
     return np.max(np.abs(ecdf_1 - ecdf_2))
 
 
@@ -82,8 +87,11 @@ def states_from_folder(sim_folder, exclude_from_col=None):
 wbm_sim_folder = "D:/projects/CPS-SenarioGeneration/data/monte_carlo/controlled_power_grid/2024-03-20_18-55-20/"
 wbm_sim_folder = Path(wbm_sim_folder)
 
-gbm_sim_folder = "D:/projects/IPTLC_BBMs/data/monte_carlo/controlled_power_grid/arch_1-0_1/BBM1_SimpleNet/2024-03-22_13-39-09"
+gbm_sim_folder = "data/monte_carlo/controlled_power_grid/arch_1-0_1/BBM1_SimpleNet/2024-03-22_13-39-09"
+# gbm_sim_folder = "data/monte_carlo/controlled_power_grid/arch_2-1_0/2024-03-25_01-47-30"
+# gbm_sim_folder = "data/monte_carlo/controlled_power_grid/arch_3-1_1/2024-03-25_09-34-32"
 gbm_sim_folder = Path(gbm_sim_folder)
+gbm_states_loc = Path("data/states/", gbm_sim_folder.parent.stem, gbm_sim_folder.stem, "states.pkl")
 
 try:
     with open("data/wbm_states.pkl", "rb") as f:
@@ -96,12 +104,14 @@ except FileNotFoundError:
 
 
 try:
-    with open("data/gbm_states.pkl", "rb") as f:
+    with open(gbm_states_loc, "rb") as f:
         gbm_states = pickle.load(f)
 
 except FileNotFoundError:
+    print("Creating the states at:", gbm_states_loc.parent)
+    os.makedirs(gbm_states_loc.parent, exist_ok=True)
     gbm_states = states_from_folder(gbm_sim_folder, exclude_from_col=80)
-    with open("data/gbm_states.pkl", "wb") as f:
+    with open(gbm_states_loc, "wb") as f:
         pickle.dump(gbm_states, f)
 
 #%% Open the plant
@@ -123,11 +133,15 @@ gbm_states = {key: gbm_states[key] for key in keys}
 
 #%% Compute the KS statistic for each state
 ks_dict = {}
+wbm_ecdfs = {}
+gbm_ecdfs = {}
 states = list(wbm_states.values())[0].columns
 
 for state in states:
     # Iterate times
     ks_list = []
+    wbm_ecdf_list = []
+    gbm_ecdf_list = []
     for t in list(wbm_states.values())[0].index:
         # Accumulate the values of this state at this time for all simulations
         wbm_values = np.array([wbm_states[key].loc[t, state] for key in keys])
@@ -162,20 +176,23 @@ for state in states:
         # Compute the KS statistic
         ks = ks_statistic(wbm_ecdf, gbm_ecdf)
 
-        # Store the KS statistic
+        # Store the KS statistic and the ECDFs
         ks_list.append(ks)
+        wbm_ecdf_list.append((bin_centers, wbm_ecdf))
+        gbm_ecdf_list.append((bin_centers, gbm_ecdf))
 
     # Store the KS statistic for this state
     ks_dict[state] = ks_list
+    wbm_ecdfs[state] = wbm_ecdf_list
+    gbm_ecdfs[state] = gbm_ecdf_list
 
 #%% Plot the KS statistics
-
-# One subplot for each state
 n_states = len(states)
 n_cols = 8
 n_rows = n_states // n_cols
 
-fig, axs = plt.subplots(n_rows, n_cols, figsize=(15, 10), constrained_layout=True, sharex=True, sharey=True)
+fig, axs = plt.subplots(n_rows, n_cols, figsize=(12.95 * 2, 5.85 * 2), constrained_layout=True,
+                        sharex=True, sharey=True)
 axs = axs.flatten()
 
 t = list(wbm_states.values())[0].index / 3600
@@ -199,6 +216,35 @@ for i in range(n_cols * n_rows):
 
     ax.set_xlim([0, t[-1]])
 
-
 fig.show()
 
+#%% Plot the ECDFs
+n_states = len(states)
+n_cols = 8
+n_rows = n_states // n_cols
+
+fig, axs = plt.subplots(n_rows, n_cols, figsize=(12.95 * 2, 5.85 * 2), constrained_layout=True,
+                        sharey=True)
+axs = axs.flatten()
+
+t = list(wbm_states.values())[0].index / 3600
+
+for i in range(n_cols * n_rows):
+    ax = axs[i]
+    if i >= n_states:
+        ax.axis("off")
+        continue
+    state = states[i]
+    ax.plot(wbm_ecdfs[state][0][0], wbm_ecdfs[state][0][1], "b", label="WBM")
+    ax.plot(gbm_ecdfs[state][0][0], gbm_ecdfs[state][0][1], "r", label="GBM")
+    ax.set_title(pg_state_names[i])
+
+    # If first column, set y label
+    if i % n_cols == 0:
+        ax.set_ylabel("ECDF")
+
+# Legend at the top
+fig.legend(["WBM", "GBM"], loc="upper center", ncol=2, bbox_to_anchor=(0.5, 1.0))
+fig.show()
+
+#%% Compute

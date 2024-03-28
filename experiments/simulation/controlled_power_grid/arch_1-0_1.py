@@ -48,7 +48,7 @@ with open("data/IO-datasets/OPF/2024-03-20_18-55-20/norm_min_max_values.pkl", "r
 
 
 # The path
-SAVE_TO = f"data/monte_carlo/controlled_power_grid/arch_1-0_1/{OPF_BBM_NAME}/{time.strftime('%Y-%m-%d_%H-%M-%S')}"
+SAVE_TO = f"data/gbm_simulations/controlled_power_grid/arch_1-0_1/{OPF_BBM_NAME}/{time.strftime('%Y-%m-%d_%H-%M-%S')}"
 
 # Set the plant
 SIM_PLANT = cpg_cases.case14(cc_type="data-driven", opf_bbm=OPF_BBM, normalization_spec=NORMALIZATION_SPEC)

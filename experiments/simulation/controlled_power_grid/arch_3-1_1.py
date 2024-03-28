@@ -61,7 +61,7 @@ CONTROL_CENTER = CC.DataDrivenControlCenter(POWER_GRID, OPF_BBM, NORMALIZATION_S
 SIM_PLANT = CPG.ControlledPowerGrid(POWER_GRID, CONTROL_CENTER)
 
 # The path
-SAVE_TO = f"data/monte_carlo/controlled_power_grid/arch_3-1_1/{time.strftime('%Y-%m-%d_%H-%M-%S')}"
+SAVE_TO = f"data/gbm_simulations/controlled_power_grid/arch_3-1_1/{time.strftime('%Y-%m-%d_%H-%M-%S')}"
 
 #%% Get initial condition and stimuli from WBM simulations
 WBM_simulation_folder = "D:/projects/CPS-SenarioGeneration/data/monte_carlo/controlled_power_grid/2024-03-20_18-55-20/"

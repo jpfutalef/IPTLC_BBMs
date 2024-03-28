@@ -42,10 +42,10 @@ with open(norm_specs_path, "rb") as f:
     norm_specs = pickle.load(f)
 
 # Rename the keys
-norm_specs["input_min"] = norm_specs.pop("min_opf_input")
-norm_specs["input_max"] = norm_specs.pop("max_opf_input")
-norm_specs["output_min"] = norm_specs.pop("min_opf_output")
-norm_specs["output_max"] = norm_specs.pop("max_opf_output")
+norm_specs["input_min"] = norm_specs.pop("min_input")
+norm_specs["input_max"] = norm_specs.pop("max_input")
+norm_specs["output_min"] = norm_specs.pop("min_output")
+norm_specs["output_max"] = norm_specs.pop("max_output")
 norm_specs["type"] = "minmax"
 
 # Load the case

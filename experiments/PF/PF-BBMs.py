@@ -14,7 +14,7 @@ print(f"Device: {device}")
 
 
 #%% Specify the paths
-datasets_folder = Path("data/IO-datasets/OPF/2024-03-20_18-55-20")
+datasets_folder = Path("data/IO-datasets/PF/2024-03-20_18-55-20")
 
 
 #%% Set up the BBM creator]
@@ -22,14 +22,14 @@ reload(creator)
 BBM_creator = creator.BBMCreator()
 
 # Set up the datasets
-dataset_name = "MinMaxNormalizedOPF"
+dataset_name = "MinMaxNormalizedPF"
 loaders = creator.setup_datasets(datasets_folder,
                                  dataset_name,
                                  remove_nans=True,
                                  ratios=(0.70, 0.15, 0.15),
                                  batch_size=32,
-                                 input_name="opf_inputs_minmax_normalized.npy",
-                                 output_name="opf_outputs_minmax_normalized.npy")
+                                 input_name="input_normalized.npy",
+                                 output_name="output_normalized.npy")
 BBM_creator.set_dataloaders(*loaders)
 
 

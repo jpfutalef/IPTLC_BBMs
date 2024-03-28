@@ -60,7 +60,7 @@ SIM_PLANT = CPG.ControlledPowerGrid(POWER_GRID, CONTROL_CENTER)
 PF_BBM_NAME = PF_BBM.__class__.__name__
 
 # The path
-SAVE_TO = f"data/monte_carlo/controlled_power_grid/arch_2-1_0/{PF_BBM_NAME}/{time.strftime('%Y-%m-%d_%H-%M-%S')}"
+SAVE_TO = f"data/gbm_simulations/controlled_power_grid/arch_2-1_0/{PF_BBM_NAME}/{time.strftime('%Y-%m-%d_%H-%M-%S')}"
 
 
 #%% Get initial condition and stimuli from WBM simulations

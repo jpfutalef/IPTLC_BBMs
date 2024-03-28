@@ -36,8 +36,8 @@ def setup_datasets(dataset_folder,
                    remove_nans=True,
                    ratios=(0.70, 0.15, 0.15),
                    batch_size=32,
-                   input_name="inputs.npy",
-                   output_name="outputs.npy",
+                   input_name="input.npy",
+                   output_name="output.npy",
                    dataset_name_is_folder=False):
     if dataset_name_is_folder:
         dataset_folder = dataset_folder / dataset_name
@@ -272,9 +272,9 @@ class BBMCreator:
 
         # Before training, check if the save_to path exists
         if save_to is not None:
-            print(f"Models and summary will be save to '{save_to}/' (will be created if it does not exist)")
+            print(f"Models and summary will be saved to '{save_to}' (will be created if it does not exist)")
             print(f"    - Model path: {self._develop_model_path()}")
-            print(f"    - Summary path: {self.save_to}/models_summary.csv")
+            print(f"    - Summary path: {self.save_to / 'models_summary.csv'}")
             os.makedirs(save_to, exist_ok=True)
 
         # Print device used for training
