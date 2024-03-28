@@ -82,8 +82,8 @@ def get_pf_data_all(data_folder: Path):
         outputs.append(pf_outputs)
 
     # Concatenate the inputs and outputs
-    inputs_matrix = np.concatenate(inputs, axis=0)
-    outputs_matrix = np.concatenate(outputs, axis=0)
+    inputs_matrix = np.vstack(inputs)
+    outputs_matrix = np.vstack(outputs)
 
     # Get the plant
     with open(data_folder / "plant.pkl", "rb") as f:
@@ -114,45 +114,6 @@ def get_output_names(filepath: Path):
     output_names = Plant.get_variables_names(sim_data["plant"].power_grid.state_idx)
 
     return output_names
-
-
-# %% An example of a simulation
-target_simulation = "simulation_0.pkl"
-target_simulation = source_folder / target_simulation
-print(f"Testing the file: {target_simulation}")
-
-pf_inputs, pf_outputs, target_sim_data = get_pf_data(target_simulation)
-print(f"PF inputs shape: {pf_inputs.shape}")
-print(f"PC outputs shape: {pf_outputs.shape}")
-
-# %% Plots of the example
-# Plot the inputs in subplots
-# num_inputs = pf_inputs.shape[1]
-# num_rows = np.sqrt(num_inputs).astype(int)
-# num_cols = np.ceil(num_inputs / num_rows).astype(int)
-# fig, axs = plt.subplots(num_rows, num_cols, figsize=(20, 10), sharex=True, constrained_layout=True)
-# axs = axs.flatten()
-# for i in range(num_rows * num_cols):
-#     if i >= num_inputs:
-#         axs[i].axis("off")
-#         continue
-#     axs[i].plot(pf_inputs[:, i])
-#     axs[i].set_title(f"Input {i}")
-# fig.show()
-#
-# # Plot the outputs in subplots
-# num_outputs = pf_outputs.shape[1]
-# num_rows = np.sqrt(num_outputs).astype(int)
-# num_cols = np.ceil(num_outputs / num_rows).astype(int)
-# fig, axs = plt.subplots(num_rows, num_cols, figsize=(20, 10), sharex=True, constrained_layout=True)
-# axs = axs.flatten()
-# for i in range(num_rows * num_cols):
-#     if i >= num_outputs:
-#         axs[i].axis("off")
-#         continue
-#     axs[i].plot(pf_outputs[:, i])
-#     axs[i].set_title(f"Output {i}")
-# fig.show()
 
 # %% Develop the datasets using all the simulations
 pf_inputs, pf_outputs, plant = get_pf_data_all(source_folder)
@@ -193,4 +154,14 @@ min_max_values_path = destination_folder / "normalization_spec.pkl"
 with open(min_max_values_path, "wb") as f:
     pickle.dump(min_max_values, f)
 
-# %% Ground truth data
+# %% Construct a dataset without the binary variables at the output
+# Get the indices of the binary variables
+binary_indices = plant.power_grid.state_idx.get_binary_indices()
+
+# Filter
+output_no_binary = np.delete(pf_outputs, binary_indices, axis=1)
+output_no_binary_normalized = np.delete(outputs_normalized, binary_indices, axis=1)
+
+# Save the dataset
+output_no_binary_path = destination_folder / "output_no_binary.npy"
+output_no_binary_normalized_path = destination_folder / "output_no_binary_normalized.npy"
