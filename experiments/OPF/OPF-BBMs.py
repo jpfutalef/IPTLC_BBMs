@@ -14,7 +14,8 @@ device = creator.get_device()
 print(f"Device: {device}")
 
 #%% Specify the paths
-datasets_folder = Path("data/IO-datasets/OPF/2024-03-20_18-55-20").resolve()
+#datasets_folder = Path("data/IO-datasets/OPF/2024-03-20_18-55-20").resolve()
+datasets_folder = Path("data/IO-datasets/OPF/2024-04-03_18-06-45").resolve()
 model_folder = Path("models/OPF/").resolve()
 
 print(f"Datasets folder: {datasets_folder}")
@@ -66,6 +67,20 @@ input_size = loaders[0].dataset[0][0].shape[0]
 output_size = loaders[0].dataset[0][1].shape[0]
 
 BBM_creator.instantiate_model(opf_bbm.BBM2_DeepNN, input_size, output_size)
+
+# Train the model
+BBM_creator.train(save_to=model_folder, epochs=100)
+BBM_creator._summary()
+
+#%% BBM 3: a two-layer feedforward neural network
+BBM_creator.instantiate_model(opf_bbm.BBM3)
+
+# Train the model
+BBM_creator.train(save_to=model_folder, epochs=100)
+BBM_creator._summary()
+
+#%% BBM 3: a two-layer feedforward neural network
+BBM_creator.instantiate_model(opf_bbm.BBM4)
 
 # Train the model
 BBM_creator.train(save_to=model_folder, epochs=100)

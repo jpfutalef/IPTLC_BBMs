@@ -21,7 +21,8 @@ import greyboxmodels.cpsmodels.Plant as Plant
 print(f"Current working directory: {os.getcwd()}")
 
 # %% Folder containing the data
-source_folder = Path("D:/projects/CPS-SenarioGeneration/data/monte_carlo/controlled_power_grid/2024-03-20_18-55-20")
+#source_folder = Path("D:/projects/CPS-SenarioGeneration/data/monte_carlo/controlled_power_grid/2024-03-20_18-55-20")
+source_folder = Path("D:/projects/CPS-SenarioGeneration/data/cpg/MonteCarlo/2024-04-03_18-06-45")
 destination_folder = Path("./data/IO-datasets/PF/", source_folder.name)
 
 os.makedirs(destination_folder, exist_ok=True)

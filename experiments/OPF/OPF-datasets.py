@@ -22,7 +22,8 @@ print(f"Current working directory: {os.getcwd()}")
 
 # %% Folder containing the data
 # source_folder = Path("D:/projects/Hierarchical_CPS_models/data/simulations/controlled_exponential_pg/20240311_011412/")
-source_folder = Path("D:/projects/CPS-SenarioGeneration/data/monte_carlo/controlled_power_grid/2024-03-20_18-55-20")
+# source_folder = Path("D:/projects/CPS-SenarioGeneration/data/monte_carlo/controlled_power_grid/2024-03-20_18-55-20")
+source_folder = Path("D:/projects/CPS-SenarioGeneration/data/cpg/MonteCarlo/2024-04-03_18-06-45")
 destination_folder = Path("./data/IO-datasets/OPF/", source_folder.name)
 
 os.makedirs(destination_folder, exist_ok=True)
