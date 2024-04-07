@@ -34,7 +34,8 @@ MAX_EXECUTION_TIME = 3600 * 8
 
 # Load the case
 OPF_BBM = opf_bbm.BBM1_SimpleNet(52, 10)
-OPF_BBM.load_state_dict(torch.load("models/BBM1_SimpleNet_MinMaxNormalizedOPF_20240321-163701.pt"))
+#OPF_BBM.load_state_dict(torch.load("models/BBM1_SimpleNet_MinMaxNormalizedOPF_20240321-163701.pt"))
+OPF_BBM.load_state_dict(torch.load("models/OPF/BBM1_SimpleNet_OPF_2024-04-03_18-06-45_20240408-003640.pt"))
 
 # OPF_BBM = opf_bbm.BBM2_DeepNN(52, 10)
 # OPF_BBM.load_model("models\BBM2-deep_MinMaxNormalizedOPF_20240321-164224.pt")
@@ -43,7 +44,7 @@ OPF_BBM.load_state_dict(torch.load("models/BBM1_SimpleNet_MinMaxNormalizedOPF_20
 OPF_BBM_NAME = OPF_BBM.__class__.__name__
 
 # Get the normalization spec
-with open("data/IO-datasets/OPF/2024-03-20_18-55-20/norm_min_max_values.pkl", "rb") as f:
+with open("data/IO-datasets/OPF/2024-04-03_18-06-45/normalization_spec.pkl", "rb") as f:
     NORMALIZATION_SPEC = pickle.load(f)
 
 
@@ -51,7 +52,8 @@ with open("data/IO-datasets/OPF/2024-03-20_18-55-20/norm_min_max_values.pkl", "r
 SAVE_TO = f"data/gbm_simulations/controlled_power_grid/arch_1-0_1/{OPF_BBM_NAME}/{time.strftime('%Y-%m-%d_%H-%M-%S')}"
 
 # Set the plant
-SIM_PLANT = cpg_cases.case14(cc_type="data-driven", opf_bbm=OPF_BBM, normalization_spec=NORMALIZATION_SPEC)
+SIM_PLANT = cpg_cases.case14(cc_type="data-driven", opf_bbm=OPF_BBM)
+SIM_PLANT.normalization_spec = NORMALIZATION_SPEC
 
 #%% Get initial condition and stimuli from WBM simulations
 WBM_simulation_folder = "D:/projects/CPS-SenarioGeneration/data/monte_carlo/controlled_power_grid/2024-03-20_18-55-20/"

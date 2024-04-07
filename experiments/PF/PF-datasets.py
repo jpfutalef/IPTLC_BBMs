@@ -21,7 +21,7 @@ import greyboxmodels.cpsmodels.Plant as Plant
 print(f"Current working directory: {os.getcwd()}")
 
 # %% Folder containing the data
-#source_folder = Path("D:/projects/CPS-SenarioGeneration/data/monte_carlo/controlled_power_grid/2024-03-20_18-55-20")
+# source_folder = Path("D:/projects/CPS-SenarioGeneration/data/monte_carlo/controlled_power_grid/2024-03-20_18-55-20")
 source_folder = Path("D:/projects/CPS-SenarioGeneration/data/cpg/MonteCarlo/2024-04-03_18-06-45")
 destination_folder = Path("./data/IO-datasets/PF/", source_folder.name)
 
@@ -54,6 +54,9 @@ def get_pf_data(filepath: Path):
 
         # Output is the response
         Y = step_dict["pg_response"]
+
+        # Filter up to column 80 to the end TODO HARDCODED!!!!
+        Y = Y[:80]
 
         inputs.append(X)
         outputs.append(Y)
@@ -116,6 +119,7 @@ def get_output_names(filepath: Path):
 
     return output_names
 
+
 # %% Develop the datasets using all the simulations
 pf_inputs, pf_outputs, plant = get_pf_data_all(source_folder)
 
@@ -146,10 +150,11 @@ np.save(inputs_normalized_path, inputs_normalized)
 np.save(outputs_normalized_path, outputs_normalized)
 
 # Also, save the min and max values
-min_max_values = {"min_input": min_input,
-                  "max_input": max_input,
-                  "min_output": min_output,
-                  "max_output": max_output}
+min_max_values = {"input_min": min_input,
+                  "input_max": max_input,
+                  "output_min": min_output,
+                  "output_max": max_output,
+                  "type": "min_max"}
 
 min_max_values_path = destination_folder / "normalization_spec.pkl"
 with open(min_max_values_path, "wb") as f:

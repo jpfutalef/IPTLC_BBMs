@@ -177,11 +177,9 @@ np.save(outputs_normalized_path, opf_outputs_normalized)
 # Also, save the min and max values
 min_max_values = {"input_min": min_opf_input,
                   "input_max": max_opf_input,
-                  "min_output": min_opf_output,
-                  "max_output": max_opf_output}
-
-min_max_values = {"output_min": min_opf_input,
-                  "output_max": max_opf_input}
+                  "output_min": min_opf_output,
+                  "output_max": max_opf_output,
+                  "type": "min_max" }
 
 min_max_values_path = destination_folder / "normalization_spec.pkl"
 with open(min_max_values_path, "wb") as f:

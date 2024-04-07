@@ -21,7 +21,7 @@ import tqdm
 
 import greyboxmodels.cpsmodels.Input as Input
 import greyboxmodels.cpsmodels.cyberphysical.ControlledPowerGrid.ControlledPowerGrid as CPG
-import greyboxmodels.cpsmodels.physical.electrical.cases as cpg_cases
+import greyboxmodels.cpsmodels.physical.electrical.cases as pg_cases
 import greyboxmodels.cpsmodels.cyber.ControlCenter as CC
 import greyboxmodels.bbmcpsmodels.physical.feedforward_nn_pf as pf_bbm
 from greyboxmodels.scenariogeneration.MonteCarlo import MonteCarlo
@@ -37,14 +37,15 @@ MAX_EXECUTION_TIME = 3600 * 8
 #%% Create the plant
 
 # BBM Power grid
-POWER_GRID = cpg_cases.case14("data-driven")
+POWER_GRID = pg_cases.case14("data-driven")
 
 # Load the BBM PF
-PF_BBM = pf_bbm.BBM1_SimpleNet(57, 105)
-PF_BBM.load_state_dict(torch.load("models/BBM1_SimpleNet_MinMaxNormalizedPF_20240325-013033_best.pt"))
+PF_BBM = pf_bbm.BBM1_SimpleNet(57, 80)
+#PF_BBM.load_state_dict(torch.load("models/BBM1_SimpleNet_MinMaxNormalizedPF_20240325-013033_best.pt"))
+PF_BBM.load_state_dict(torch.load("models/BBM1_SimpleNet_PF_2024-04-03_18-06-45_20240408-010659.pt"))
 
 # Get the normalization spec
-with open("data/IO-datasets/PF/2024-03-20_18-55-20/norm_min_max_values.pkl", "rb") as f:
+with open("data/IO-datasets/PF/2024-04-03_18-06-45/normalization_spec.pkl", "rb") as f:
     NORMALIZATION_SPEC = pickle.load(f)
 
 # Pass to the plant
@@ -77,8 +78,10 @@ print("Loading external stimuli realizations...")
 try:
     with open("data/external_stimuli_realization_cpg.pkl", "rb") as f:
         E_realizations = pickle.load(f)
+        print("     External stimuli realizations loaded successfully!")
 
 except FileNotFoundError:
+    print("     External stimuli realizations not found... creating them")
     locs = [x for x in WBM_simulation_folder.iterdir() if x.is_file() and x.suffix == ".pkl" and "simulation" in x.stem]
     E_realizations = []
     for file in tqdm.tqdm(locs):

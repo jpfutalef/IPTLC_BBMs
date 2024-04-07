@@ -46,6 +46,7 @@ class BBM2_DeepNN(nn.Module):
         output = self.fc4(x)
         return output
 
+
 class BBM3(nn.Module):
     def __init__(self, dropout=0.5):
         super(BBM3, self).__init__()
@@ -72,6 +73,7 @@ class BBM3(nn.Module):
         x = F.relu(self.fc3(x))
         output = self.fc4(x)
         return output
+
 
 class BBM4(nn.Module):
     def __init__(self, dropout=0.5):
