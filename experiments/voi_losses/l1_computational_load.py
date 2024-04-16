@@ -45,13 +45,14 @@ def process_folder(folder):
 
 
 # %% Test the computational load
-wbm_info = process_folder("D:/projects/CPS-SenarioGeneration/data/monte_carlo/controlled_power_grid/2024-03-20_18-55-20/")
-gbm1_info = process_folder("data/monte_carlo/controlled_power_grid/arch_1-0_1/2024-03-22_10-41-19")
-gbm2_info = process_folder("data/monte_carlo/controlled_power_grid/arch_2-1_0/2024-03-25_01-47-30")
-gbm3_info = process_folder("data/monte_carlo/controlled_power_grid/arch_3-1_1/2024-03-25_09-34-32")
+wbm_info = process_folder("D:/projects/CPS-SenarioGeneration/data/cpg/MonteCarlo/2024-04-03_18-06-45/")
+gbm1_info = process_folder("data/gbm_simulations/controlled_power_grid/arch_1-0_1/2024-04-08_14-14-09")
+gbm2_info = process_folder("data/gbm_simulations/controlled_power_grid/arch_2-1_0/BBM1_SimpleNet/2024-04-08_02-00-59")
+gbm3_info = process_folder("data/gbm_simulations/controlled_power_grid/arch_3-1_1/2024-04-08_02-00-59")
 
 #%% Group
 info_list = [wbm_info, gbm1_info, gbm2_info, gbm3_info]
+names = ["WBM", "GBM1", "GBM2", "Full BBM"]
 
 # Save
 with open("data/voi_losses/time_sim_time_array.pkl", "wb") as f:
@@ -84,7 +85,25 @@ fig.suptitle("Execution time for WBM and GBM simulation")
 fig.show()
 
 #%% Statistics
-for info in info_list:
+# Store in a dataframe
+import pandas as pd
+
+d = {}
+
+for info, name in zip(info_list, names):
     print(f"Folder: {info['folder']}")
-    print(f"Total execution time: {np.mean(info['total_execution_time'])} +- {np.std(info['total_execution_time'])}")
+    mean = np.mean(info["total_execution_time"])
+    std = np.std(info["total_execution_time"])
+    print(f"Total execution time: {mean:.2f} ± {std:.2f} s")
+
+    # Store in dict
+    d[name] = {"L1": mean}
     print("")
+
+df = pd.DataFrame(d).T
+
+#%% Save
+df.to_csv("data/voi_losses/l1_computational_load/l1_computational_load.csv")
+
+
+

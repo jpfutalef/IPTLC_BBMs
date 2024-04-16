@@ -32,16 +32,17 @@ SIM_MISSION_TIME = 3600 * 24 * 4
 SIM_STEP_TIME = 15 * 60
 SIM_INITIAL_TIME = 0.
 MAX_EXECUTION_TIME = 3600 * 8
+WBM_simulation_folder = "D:/projects/CPS-SenarioGeneration/data/cpg/MonteCarlo/2024-04-03_18-06-45"
 
 #%% BBM Power grid
 POWER_GRID = cpg_cases.case14("data-driven")
 
 # Load the BBM PF
-PF_BBM = pf_bbm.BBM1_SimpleNet(57, 105)
-PF_BBM.load_state_dict(torch.load("models/BBM1_SimpleNet_MinMaxNormalizedPF_20240325-013033_best.pt"))
+PF_BBM = pf_bbm.BBM1_SimpleNet(57, 80)
+PF_BBM.load_state_dict(torch.load("models/BBM1_SimpleNet_PF_2024-04-03_18-06-45_20240408-010659.pt"))
 
 # Get the normalization spec
-with open("data/IO-datasets/PF/2024-03-20_18-55-20/norm_min_max_values.pkl", "rb") as f:
+with open("data/IO-datasets/PF/2024-04-03_18-06-45/normalization_spec.pkl", "rb") as f:
     NORMALIZATION_SPEC_PF = pickle.load(f)
 
 POWER_GRID.set_bbm(PF_BBM, NORMALIZATION_SPEC_PF)
@@ -49,10 +50,11 @@ POWER_GRID.set_bbm(PF_BBM, NORMALIZATION_SPEC_PF)
 #%% BBM Control center
 # Load the case
 OPF_BBM = opf_bbm.BBM1_SimpleNet(52, 10)
-OPF_BBM.load_state_dict(torch.load("models/BBM1_SimpleNet_MinMaxNormalizedOPF_20240321-163701.pt"))
+#OPF_BBM.load_state_dict(torch.load("models/BBM1_SimpleNet_MinMaxNormalizedOPF_20240321-163701.pt"))
+OPF_BBM.load_state_dict(torch.load("models/OPF/BBM1_SimpleNet_OPF_2024-04-03_18-06-45_20240408-003640.pt"))
 
 # Get the normalization spec
-with open("data/IO-datasets/OPF/2024-03-20_18-55-20/norm_min_max_values.pkl", "rb") as f:
+with open("data/IO-datasets/OPF/2024-04-03_18-06-45/normalization_spec.pkl", "rb") as f:
     NORMALIZATION_SPEC_OPF = pickle.load(f)
 
 CONTROL_CENTER = CC.DataDrivenControlCenter(POWER_GRID, OPF_BBM, NORMALIZATION_SPEC_OPF)
@@ -64,7 +66,6 @@ SIM_PLANT = CPG.ControlledPowerGrid(POWER_GRID, CONTROL_CENTER)
 SAVE_TO = f"data/gbm_simulations/controlled_power_grid/arch_3-1_1/{time.strftime('%Y-%m-%d_%H-%M-%S')}"
 
 #%% Get initial condition and stimuli from WBM simulations
-WBM_simulation_folder = "D:/projects/CPS-SenarioGeneration/data/monte_carlo/controlled_power_grid/2024-03-20_18-55-20/"
 WBM_simulation_folder = Path(WBM_simulation_folder)
 
 # Print the WBM report

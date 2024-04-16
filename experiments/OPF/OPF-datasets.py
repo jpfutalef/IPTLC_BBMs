@@ -31,6 +31,7 @@ os.makedirs(destination_folder, exist_ok=True)
 print(f"Source folder: {source_folder.resolve()}")
 print(f"[Created] Destination folder: {destination_folder.resolve()}")
 
+
 # %% Functions
 def get_opf_data(filepath: Path):
     # Create a function that receives a path to a simulation and returns the inputs and outputs
@@ -44,6 +45,7 @@ def get_opf_data(filepath: Path):
     output_names = Plant.get_variables_names(sim_data["plant"].control_center.state_idx)
 
     return opf_inputs, opf_outputs
+
 
 def get_output_names(filepath: Path):
     # Open the data
@@ -111,7 +113,7 @@ opf_inputs, opf_outputs = get_opf_data(target_simulation)
 print(f"CC inputs shape: {opf_inputs.shape}")
 print(f"CC outputs shape: {opf_outputs.shape}")
 
-#%% Get the output names
+# %% Get the output names
 opf_output_names = get_output_names(target_simulation)
 
 # Save the output names
@@ -119,7 +121,7 @@ output_names_path = destination_folder / "output_names.pkl"
 with open(output_names_path, "wb") as f:
     pickle.dump(opf_output_names, f)
 
-#%% Plots of the example
+# %% Plots of the example
 # Inputs in subplots
 fig, axs = plt.subplots(4, 13, figsize=(20, 10), sharex=True, constrained_layout=True)
 axs = axs.flatten()
@@ -140,13 +142,13 @@ for i in range(10):
 
 fig.show()
 
-#%% Develop the datasets using all the simulations
+# %% Develop the datasets using all the simulations
 opf_inputs, opf_outputs, plant, output_names = get_opf_data_all(source_folder)
 
 print(f"CC inputs shape: {opf_inputs.shape}")
 print(f"CC outputs shape: {opf_outputs.shape}")
 
-#%% Save the inputs and outputs to numpy arrays
+# %% Save the inputs and outputs to numpy arrays
 print(f"Saving the inputs and outputs to numpy arrays...")
 print(f"    Destination folder: {destination_folder.resolve()}")
 
@@ -165,7 +167,7 @@ with open(output_names_path, "wb") as f:
 opf_inputs_normalized, min_opf_input, max_opf_input = min_max_normalize(opf_inputs)
 opf_outputs_normalized, min_opf_output, max_opf_output = min_max_normalize(opf_outputs)
 
-#%% Save the normalized inputs and outputs to numpy arrays
+# %% Save the normalized inputs and outputs to numpy arrays
 print(f"Saving the normalized inputs and outputs to numpy arrays...")
 print(f"    Destination folder: {destination_folder.resolve()}")
 inputs_normalized_path = destination_folder / "input_normalized.npy"
@@ -179,10 +181,8 @@ min_max_values = {"input_min": min_opf_input,
                   "input_max": max_opf_input,
                   "output_min": min_opf_output,
                   "output_max": max_opf_output,
-                  "type": "min_max" }
+                  "type": "min_max"}
 
 min_max_values_path = destination_folder / "normalization_spec.pkl"
 with open(min_max_values_path, "wb") as f:
     pickle.dump(min_max_values, f)
-
-#%% Ground truth data

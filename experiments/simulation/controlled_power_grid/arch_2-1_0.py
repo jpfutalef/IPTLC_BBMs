@@ -33,6 +33,7 @@ SIM_MISSION_TIME = 3600 * 24 * 4
 SIM_STEP_TIME = 15 * 60
 SIM_INITIAL_TIME = 0.
 MAX_EXECUTION_TIME = 3600 * 8
+WBM_simulation_folder = "D:/projects/CPS-SenarioGeneration/data/cpg/MonteCarlo/2024-04-03_18-06-45"
 
 #%% Create the plant
 
@@ -65,7 +66,6 @@ SAVE_TO = f"data/gbm_simulations/controlled_power_grid/arch_2-1_0/{PF_BBM_NAME}/
 
 
 #%% Get initial condition and stimuli from WBM simulations
-WBM_simulation_folder = "D:/projects/CPS-SenarioGeneration/data/monte_carlo/controlled_power_grid/2024-03-20_18-55-20/"
 WBM_simulation_folder = Path(WBM_simulation_folder)
 
 # Print the WBM report
