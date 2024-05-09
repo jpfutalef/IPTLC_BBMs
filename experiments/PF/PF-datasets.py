@@ -1,5 +1,5 @@
 """
-A script to develop the datasets to train a data-driven model (surrogate model) for the Optimal Power Flow (OPF) problem.
+A script to develop the datasets to train a sim_data-driven model (surrogate model) for the Optimal Power Flow (OPF) problem.
 
 The goal is to generate the inputs and outputs for the OPF problem, normalize them, and save them to files.
 
@@ -20,10 +20,10 @@ import greyboxmodels.cpsmodels.Plant as Plant
 # Set the working directory
 print(f"Current working directory: {os.getcwd()}")
 
-# %% Folder containing the data
-# source_folder = Path("D:/projects/CPS-SenarioGeneration/data/monte_carlo/controlled_power_grid/2024-03-20_18-55-20")
+# %% Folder containing the sim_data
+# source_folder = Path("D:/projects/CPS-SenarioGeneration/sim_data/monte_carlo/controlled_power_grid/2024-03-20_18-55-20")
 source_folder = Path("D:/projects/CPS-SenarioGeneration/data/cpg/MonteCarlo/2024-04-03_18-06-45")
-destination_folder = Path("./data/IO-datasets/PF/", source_folder.name)
+destination_folder = Path("./sim_data/IO-datasets/PF/", source_folder.name)
 
 os.makedirs(destination_folder, exist_ok=True)
 
@@ -34,7 +34,7 @@ print(f"[Created] Destination folder: {destination_folder.resolve()}")
 # %% Functions
 def get_pf_data(filepath: Path):
     # Create a function that receives a path to a simulation and returns the inputs and outputs
-    # Open the data
+    # Open the sim_data
     with open(filepath, "rb") as f:
         sim_data = pickle.load(f)
 
@@ -111,7 +111,7 @@ def min_max_normalize(array: np.ndarray, min_array: np.ndarray = None, max_array
 
 
 def get_output_names(filepath: Path):
-    # Open the data
+    # Open the sim_data
     with open(filepath, "rb") as f:
         sim_data = pickle.load(f)
 

@@ -29,7 +29,7 @@ max_exec_time = 120
 
 # Save path
 now = time.strftime("%Y%m%d_%H%M%S")
-sim_folder = f"data/simulations/controlled_pg/{now}/"
+sim_folder = f"sim_data/simulations/controlled_pg/{now}/"
 
 # Load the OPF BBM
 opf_bbm_path = "models\BBM1_SimpleNet_MinMaxNormalizedOPF_20240314-114822.pt"
@@ -37,7 +37,7 @@ opf_bbm = nn_ff.BBM1_SimpleNet(52, 10)
 opf_bbm.load_state_dict(torch.load(opf_bbm_path))
 
 # Open the normalization specs
-norm_specs_path = "data/OPF/20240311_011412/norm_min_max_values.pkl"
+norm_specs_path = "sim_data/OPF/20240311_011412/norm_min_max_values.pkl"
 with open(norm_specs_path, "rb") as f:
     norm_specs = pickle.load(f)
 
@@ -49,7 +49,7 @@ norm_specs["output_max"] = norm_specs.pop("max_output")
 norm_specs["type"] = "minmax"
 
 # Load the case
-plant = cpg_cases.case14(cc_type="data-driven",
+plant = cpg_cases.case14(cc_type="sim_data-driven",
                          opf_bbm=opf_bbm)
 plant.control_center.normalization_spec = norm_specs
 
@@ -137,7 +137,7 @@ while time.time() - init_time < max_exec_time:
     # Print message
     print(f"Starting simulation {sim_num} and saving to {save_path}")
 
-    # Containers for the simulation data
+    # Containers for the simulation sim_data
     simulation_data = {
         "time": [],
         "external_stimuli": [],
@@ -164,7 +164,7 @@ while time.time() - init_time < max_exec_time:
         # Pass to the plant
         x = plant.step(dt, x_prev, e_pg, None)
 
-        # Save the simulation data
+        # Save the simulation sim_data
         simulation_data["time"].append(t_miss)
         simulation_data["external_stimuli"].append(e_pg.copy())
         simulation_data["state"].append(x.copy())
@@ -181,7 +181,7 @@ while time.time() - init_time < max_exec_time:
 
     pbar.close()
 
-    # Save the simulation data
+    # Save the simulation sim_data
     with open(save_path, "wb") as f:
         pickle.dump(simulation_data, f)
 

@@ -35,30 +35,24 @@ SIM_STEP_TIME = 15 * 60
 SIM_INITIAL_TIME = 0.
 MAX_EXECUTION_TIME = 3600 * 8
 
-WBM_simulation_folder = "D:/projects/CPS-SenarioGeneration/data/cpg/MonteCarlo/2024-04-03_18-06-45"
+WBM_simulation_folder = "D:/projects/CPS-SenarioGeneration/sim_data/cpg/MonteCarlo/2024-04-03_18-06-45"
+SAVE_TO = f"sim_data/gbm_simulations/controlled_power_grid/arch_1-0_1/{time.strftime('%Y-%m-%d_%H-%M-%S')}"
 
 #%% BBM Power grid
 POWER_GRID = pg_cases.case14()
 
-
 #%% BBM Control center
-# Load the case
 OPF_BBM = opf_bbm.BBM1_SimpleNet(52, 10)
-#OPF_BBM.load_state_dict(torch.load("models/BBM1_SimpleNet_MinMaxNormalizedOPF_20240321-163701.pt"))
 OPF_BBM.load_state_dict(torch.load("models/OPF/BBM1_SimpleNet_OPF_2024-04-03_18-06-45_20240408-135438.pt"))
 
 # Get the normalization spec
-with open("data/IO-datasets/OPF/2024-04-03_18-06-45/normalization_spec.pkl", "rb") as f:
+with open("sim_data/IO-datasets/OPF/2024-04-03_18-06-45/normalization_spec.pkl", "rb") as f:
     NORMALIZATION_SPEC_OPF = pickle.load(f)
 
 CONTROL_CENTER = CC.DataDrivenControlCenter(POWER_GRID, OPF_BBM, NORMALIZATION_SPEC_OPF)
 
 #%% Create the Controlled Power Grid
 SIM_PLANT = CPG.ControlledPowerGrid(POWER_GRID, CONTROL_CENTER)
-
-# The path
-SAVE_TO = f"data/gbm_simulations/controlled_power_grid/arch_1-0_1/{time.strftime('%Y-%m-%d_%H-%M-%S')}"
-
 
 #%% Get initial condition and stimuli from WBM simulations
 WBM_simulation_folder = Path(WBM_simulation_folder)
@@ -72,7 +66,7 @@ with open(WBM_simulation_folder / "report.pkl", "rb") as f:
 reload(Input)
 print("Loading external stimuli realizations...")
 try:
-    with open("data/external_stimuli_realization_cpg.pkl", "rb") as f:
+    with open("sim_data/external_stimuli_realization_cpg.pkl", "rb") as f:
         E_realizations = pickle.load(f)
 
 except FileNotFoundError:
@@ -84,7 +78,7 @@ except FileNotFoundError:
             df = pd.DataFrame(data["uncontrolled_inputs"], index=data["time"])
             E_realizations.append(df)
 
-    with open("data/external_stimuli_realization_cpg.pkl", "wb") as f:
+    with open("sim_data/external_stimuli_realization_cpg.pkl", "wb") as f:
         pickle.dump(E_realizations, f)
 
 EXTERNAL_STIMULI = Input.Input(realizations=E_realizations)
@@ -99,6 +93,9 @@ with open(target_file, "rb") as f:
 
 #%% Run simulation
 if __name__ == '__main__':
+
+
+
     MC = MonteCarlo.MonteCarlo(SIM_PLANT,
                                SIM_INITIAL_CONDITION,
                                SIM_MISSION_TIME,

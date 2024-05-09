@@ -14,8 +14,8 @@ device = creator.get_device()
 print(f"Device: {device}")
 
 #%% Specify the paths
-#datasets_folder = Path("data/IO-datasets/OPF/2024-03-20_18-55-20").resolve()
-datasets_folder = Path("data/IO-datasets/OPF/2024-04-03_18-06-45").resolve()
+#datasets_folder = Path("sim_data/IO-datasets/OPF/2024-03-20_18-55-20").resolve()
+datasets_folder = Path("sim_data/IO-datasets/OPF/2024-04-03_18-06-45").resolve()
 model_folder = Path("models/OPF/").resolve()
 
 print(f"Datasets folder: {datasets_folder}")

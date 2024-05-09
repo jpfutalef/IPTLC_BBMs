@@ -19,7 +19,7 @@ print(f"Working directory: {os.getcwd()}")
 device = creator.get_device()
 print(device)
 
-#%% Open test data
+#%% Open test sim_data
 dataloaders_loc = Path("models/OPF/dataloaders_OPF_2024-03-20_18-55-20.pth").resolve()
 
 print(f"Loading dataloaders from {dataloaders_loc}")
@@ -35,19 +35,19 @@ if isinstance(input_data, np.ndarray):
 if isinstance(output_data, np.ndarray):
     output_data = torch.from_numpy(output_data).float()
 
-# Move the data to the device
+# Move the sim_data to the device
 input_data = input_data.to(device)
 output_data = output_data.to(device)
 
-# Shape of the data
+# Shape of the sim_data
 input_size = input_data.shape[1]
 output_size = output_data.shape[1]
-print(f"     Input data shape: {input_size}")
-print(f"     Output data shape: {output_size}")
+print(f"     Input sim_data shape: {input_size}")
+print(f"     Output sim_data shape: {output_size}")
 print(f"     Number of samples: {len(test_dataset)}")
 
 #%% Get the output names
-with open("data/IO-datasets/OPF/2024-03-20_18-55-20/output_names.pkl", "rb") as f:
+with open("sim_data/IO-datasets/OPF/2024-03-20_18-55-20/output_names.pkl", "rb") as f:
     output_names = pickle.load(f)
 
 # %% Load the models
@@ -72,7 +72,7 @@ pref_bbm2 = bbm2(input_data)
 #%% 45 degree line for the predictions
 line = np.linspace(0, 1, 100)
 
-# Plot the predictions versus the test data
+# Plot the predictions versus the test sim_data
 num_outputs = output_data.shape[1]
 n_cols = 5
 n_rows = int(np.ceil(num_outputs / n_cols))
@@ -90,7 +90,7 @@ for i in range(n_rows * n_cols):
     # Plot the 45 degree line
     ax.plot(line, line, color="black", linestyle="--", linewidth=0.6)
 
-    # Plot the test data versus the predictions
+    # Plot the test sim_data versus the predictions
     ax.plot(output_data[:, i].cpu().detach().numpy(), pred_bbm1[:, i].cpu().detach().numpy(),
             'o', color=colors(0/10), alpha=0.3, linewidth=1, markersize=1)
 

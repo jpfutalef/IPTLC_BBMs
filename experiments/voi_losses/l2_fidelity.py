@@ -84,16 +84,16 @@ def states_from_folder(sim_folder, exclude_from_col=None):
 
 
 # %% Test the approach
-wbm_sim_folder = "D:/projects/CPS-SenarioGeneration/data/monte_carlo/controlled_power_grid/2024-03-20_18-55-20/"
+wbm_sim_folder = "D:/projects/CPS-SenarioGeneration/sim_data/monte_carlo/controlled_power_grid/2024-03-20_18-55-20/"
 wbm_sim_folder = Path(wbm_sim_folder)
-wbm_states_loc = Path("data/gbm_simulations/controlled_power_grid") / "wbm_states.pkl"
+wbm_states_loc = Path("sim_data/gbm_simulations/controlled_power_grid") / "wbm_states.pkl"
 
-# gbm_sim_folder = "data/gbm_simulations/controlled_power_grid/arch_1-0_1/2024-04-08_14-14-09"
-# gbm_sim_folder = "data/gbm_simulations/controlled_power_grid/arch_2-1_0/2024-04-08_02-00-59"
-gbm_sim_folder = "data/gbm_simulations/controlled_power_grid/arch_3-1_1/2024-04-08_02-00-59"
+# gbm_sim_folder = "sim_data/gbm_simulations/controlled_power_grid/arch_1-0_1/2024-04-08_14-14-09"
+# gbm_sim_folder = "sim_data/gbm_simulations/controlled_power_grid/arch_2-1_0/2024-04-08_02-00-59"
+gbm_sim_folder = "sim_data/gbm_simulations/controlled_power_grid/arch_3-1_1/2024-04-08_02-00-59"
 gbm_sim_folder = Path(gbm_sim_folder)
 gbm_name = gbm_sim_folder.parent.name
-gbm_states_loc = Path("data/gbm_simulations/controlled_power_grid") / f"{gbm_name}_states.pkl"
+gbm_states_loc = Path("sim_data/gbm_simulations/controlled_power_grid") / f"{gbm_name}_states.pkl"
 
 try:
     with open(wbm_states_loc, "rb") as f:

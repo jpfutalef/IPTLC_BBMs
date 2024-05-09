@@ -46,7 +46,7 @@ def setup_datasets(dataset_folder,
     # Print the dataset name
     print(f"Loading: {dataset_folder}")
 
-    # Load the data
+    # Load the sim_data
     X_np = np.load(dataset_folder / input_name)
     Y_np = np.load(dataset_folder / output_name)
 
@@ -213,7 +213,7 @@ class BBMCreator:
         running_loss = 0.0
         total_batches = 0
         for i, (inputs, benchmark_outputs) in bar:
-            # Move the data to the device
+            # Move the sim_data to the device
             inputs = inputs.to(self.device)
             benchmark_outputs = benchmark_outputs.to(self.device)
 
@@ -346,7 +346,7 @@ class BBMCreator:
         return path
 
     def evaluate_loss(self, X, Y):
-        # Check if data is in the device, and move it if not
+        # Check if sim_data is in the device, and move it if not
         X = X.to(self.device)
         Y = Y.to(self.device)
 

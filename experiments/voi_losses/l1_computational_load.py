@@ -45,17 +45,17 @@ def process_folder(folder):
 
 
 # %% Test the computational load
-wbm_info = process_folder("D:/projects/CPS-SenarioGeneration/data/cpg/MonteCarlo/2024-04-03_18-06-45/")
-gbm1_info = process_folder("data/gbm_simulations/controlled_power_grid/arch_1-0_1/2024-04-08_14-14-09")
-gbm2_info = process_folder("data/gbm_simulations/controlled_power_grid/arch_2-1_0/BBM1_SimpleNet/2024-04-08_02-00-59")
-gbm3_info = process_folder("data/gbm_simulations/controlled_power_grid/arch_3-1_1/2024-04-08_02-00-59")
+wbm_info = process_folder("D:/projects/CPS-SenarioGeneration/sim_data/cpg/MonteCarlo/2024-04-03_18-06-45/")
+gbm1_info = process_folder("sim_data/gbm_simulations/controlled_power_grid/arch_1-0_1/2024-04-08_14-14-09")
+gbm2_info = process_folder("sim_data/gbm_simulations/controlled_power_grid/arch_2-1_0/BBM1_SimpleNet/2024-04-08_02-00-59")
+gbm3_info = process_folder("sim_data/gbm_simulations/controlled_power_grid/arch_3-1_1/2024-04-08_02-00-59")
 
 #%% Group
 info_list = [wbm_info, gbm1_info, gbm2_info, gbm3_info]
 names = ["WBM", "GBM1", "GBM2", "Full BBM"]
 
 # Save
-with open("data/voi_losses/time_sim_time_array.pkl", "wb") as f:
+with open("sim_data/voi_losses/time_sim_time_array.pkl", "wb") as f:
     pickle.dump(info_list, f)
 
 # %% Plots
@@ -103,7 +103,7 @@ for info, name in zip(info_list, names):
 df = pd.DataFrame(d).T
 
 #%% Save
-df.to_csv("data/voi_losses/l1_computational_load/l1_computational_load.csv")
+df.to_csv("sim_data/voi_losses/l1_computational_load/l1_computational_load.csv")
 
 
 

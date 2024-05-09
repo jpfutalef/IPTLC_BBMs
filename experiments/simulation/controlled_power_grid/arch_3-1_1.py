@@ -32,17 +32,17 @@ SIM_MISSION_TIME = 3600 * 24 * 4
 SIM_STEP_TIME = 15 * 60
 SIM_INITIAL_TIME = 0.
 MAX_EXECUTION_TIME = 3600 * 8
-WBM_simulation_folder = "D:/projects/CPS-SenarioGeneration/data/cpg/MonteCarlo/2024-04-03_18-06-45"
+WBM_simulation_folder = "D:/projects/CPS-SenarioGeneration/sim_data/cpg/MonteCarlo/2024-04-03_18-06-45"
 
 #%% BBM Power grid
-POWER_GRID = cpg_cases.case14("data-driven")
+POWER_GRID = cpg_cases.case14("sim_data-driven")
 
 # Load the BBM PF
 PF_BBM = pf_bbm.BBM1_SimpleNet(57, 80)
 PF_BBM.load_state_dict(torch.load("models/BBM1_SimpleNet_PF_2024-04-03_18-06-45_20240408-010659.pt"))
 
 # Get the normalization spec
-with open("data/IO-datasets/PF/2024-04-03_18-06-45/normalization_spec.pkl", "rb") as f:
+with open("sim_data/IO-datasets/PF/2024-04-03_18-06-45/normalization_spec.pkl", "rb") as f:
     NORMALIZATION_SPEC_PF = pickle.load(f)
 
 POWER_GRID.set_bbm(PF_BBM, NORMALIZATION_SPEC_PF)
@@ -54,7 +54,7 @@ OPF_BBM = opf_bbm.BBM1_SimpleNet(52, 10)
 OPF_BBM.load_state_dict(torch.load("models/OPF/BBM1_SimpleNet_OPF_2024-04-03_18-06-45_20240408-003640.pt"))
 
 # Get the normalization spec
-with open("data/IO-datasets/OPF/2024-04-03_18-06-45/normalization_spec.pkl", "rb") as f:
+with open("sim_data/IO-datasets/OPF/2024-04-03_18-06-45/normalization_spec.pkl", "rb") as f:
     NORMALIZATION_SPEC_OPF = pickle.load(f)
 
 CONTROL_CENTER = CC.DataDrivenControlCenter(POWER_GRID, OPF_BBM, NORMALIZATION_SPEC_OPF)
@@ -63,7 +63,7 @@ CONTROL_CENTER = CC.DataDrivenControlCenter(POWER_GRID, OPF_BBM, NORMALIZATION_S
 SIM_PLANT = CPG.ControlledPowerGrid(POWER_GRID, CONTROL_CENTER)
 
 # The path
-SAVE_TO = f"data/gbm_simulations/controlled_power_grid/arch_3-1_1/{time.strftime('%Y-%m-%d_%H-%M-%S')}"
+SAVE_TO = f"sim_data/gbm_simulations/controlled_power_grid/arch_3-1_1/{time.strftime('%Y-%m-%d_%H-%M-%S')}"
 
 #%% Get initial condition and stimuli from WBM simulations
 WBM_simulation_folder = Path(WBM_simulation_folder)
@@ -76,7 +76,7 @@ with open(WBM_simulation_folder / "report.pkl", "rb") as f:
 reload(Input)
 print("Loading external stimuli realizations...")
 try:
-    with open("data/external_stimuli_realization_cpg.pkl", "rb") as f:
+    with open("sim_data/external_stimuli_realization_cpg.pkl", "rb") as f:
         E_realizations = pickle.load(f)
 
 except FileNotFoundError:
@@ -88,7 +88,7 @@ except FileNotFoundError:
             df = pd.DataFrame(data["uncontrolled_inputs"], index=data["time"])
             E_realizations.append(df)
 
-    with open("data/external_stimuli_realization_cpg.pkl", "wb") as f:
+    with open("sim_data/external_stimuli_realization_cpg.pkl", "wb") as f:
         pickle.dump(E_realizations, f)
 
 EXTERNAL_STIMULI = Input.Input(realizations=E_realizations)

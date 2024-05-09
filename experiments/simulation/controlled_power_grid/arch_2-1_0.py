@@ -33,12 +33,12 @@ SIM_MISSION_TIME = 3600 * 24 * 4
 SIM_STEP_TIME = 15 * 60
 SIM_INITIAL_TIME = 0.
 MAX_EXECUTION_TIME = 3600 * 8
-WBM_simulation_folder = "D:/projects/CPS-SenarioGeneration/data/cpg/MonteCarlo/2024-04-03_18-06-45"
+WBM_simulation_folder = "D:/projects/CPS-SenarioGeneration/sim_data/cpg/MonteCarlo/2024-04-03_18-06-45"
 
 #%% Create the plant
 
 # BBM Power grid
-POWER_GRID = pg_cases.case14("data-driven")
+POWER_GRID = pg_cases.case14("sim_data-driven")
 
 # Load the BBM PF
 PF_BBM = pf_bbm.BBM1_SimpleNet(57, 80)
@@ -46,7 +46,7 @@ PF_BBM = pf_bbm.BBM1_SimpleNet(57, 80)
 PF_BBM.load_state_dict(torch.load("models/BBM1_SimpleNet_PF_2024-04-03_18-06-45_20240408-010659.pt"))
 
 # Get the normalization spec
-with open("data/IO-datasets/PF/2024-04-03_18-06-45/normalization_spec.pkl", "rb") as f:
+with open("sim_data/IO-datasets/PF/2024-04-03_18-06-45/normalization_spec.pkl", "rb") as f:
     NORMALIZATION_SPEC = pickle.load(f)
 
 # Pass to the plant
@@ -62,7 +62,7 @@ SIM_PLANT = CPG.ControlledPowerGrid(POWER_GRID, CONTROL_CENTER)
 PF_BBM_NAME = PF_BBM.__class__.__name__
 
 # The path
-SAVE_TO = f"data/gbm_simulations/controlled_power_grid/arch_2-1_0/{PF_BBM_NAME}/{time.strftime('%Y-%m-%d_%H-%M-%S')}"
+SAVE_TO = f"sim_data/gbm_simulations/controlled_power_grid/arch_2-1_0/{PF_BBM_NAME}/{time.strftime('%Y-%m-%d_%H-%M-%S')}"
 
 
 #%% Get initial condition and stimuli from WBM simulations
@@ -76,7 +76,7 @@ with open(WBM_simulation_folder / "report.pkl", "rb") as f:
 reload(Input)
 print("Loading external stimuli realizations...")
 try:
-    with open("data/external_stimuli_realization_cpg.pkl", "rb") as f:
+    with open("sim_data/external_stimuli_realization_cpg.pkl", "rb") as f:
         E_realizations = pickle.load(f)
         print("     External stimuli realizations loaded successfully!")
 
@@ -90,7 +90,7 @@ except FileNotFoundError:
             df = pd.DataFrame(data["uncontrolled_inputs"], index=data["time"])
             E_realizations.append(df)
 
-    with open("data/external_stimuli_realization_cpg.pkl", "wb") as f:
+    with open("sim_data/external_stimuli_realization_cpg.pkl", "wb") as f:
         pickle.dump(E_realizations, f)
 
 EXTERNAL_STIMULI = Input.Input(realizations=E_realizations)

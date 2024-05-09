@@ -13,28 +13,29 @@ with open(wbm_target_sim, "rb") as f:
     wbm_sim_data = pickle.load(f)
 
 # %% Architecture 1
-gbm_1_sim_folder = Path("data/gbm_simulations/controlled_power_grid/arch_1-0_1/2024-04-08_14-14-09")
-# gbm_1_sim_folder = Path("data/gbm_simulations/controlled_power_grid/arch_1-0_1/BBM1_SimpleNet/2024-04-08_14-02-43")
+# gbm_1_sim_folder = Path("sim_data/gbm_simulations/controlled_power_grid/arch_1-0_1/2024-04-08_14-14-09")
+gbm_1_sim_folder = Path("sim_data/gbm_simulations/controlled_power_grid/arch_1-0_1/2024-04-19_12-44-30")
+# gbm_1_sim_folder = Path("sim_data/gbm_simulations/controlled_power_grid/arch_1-0_1/BBM1_SimpleNet/2024-04-08_14-02-43")
 gbm_1_target_sim = gbm_1_sim_folder / target_simulation
 
 with open(gbm_1_target_sim, "rb") as f:
     gbm_1_sim_data = pickle.load(f)
 
 # %% Architecture 2
-gbm_2_sim_folder = Path("data/gbm_simulations/controlled_power_grid/arch_2-1_0/2024-04-08_02-00-59")
+gbm_2_sim_folder = Path("sim_data/gbm_simulations/controlled_power_grid/arch_2-1_0/2024-04-08_02-00-59")
 gbm_2_target_sim = gbm_2_sim_folder / target_simulation
 
 with open(gbm_2_target_sim, "rb") as f:
     gbm_2_sim_data = pickle.load(f)
 
 # %% Full BBM
-full_bbm_sim_folder = Path("data/gbm_simulations/controlled_power_grid/arch_3-1_1/2024-04-08_02-00-59")
+full_bbm_sim_folder = Path("sim_data/gbm_simulations/controlled_power_grid/arch_3-1_1/2024-04-08_02-00-59")
 full_bbm_target_sim = full_bbm_sim_folder / target_simulation
 
 with open(full_bbm_target_sim, "rb") as f:
     full_bbm_sim_data = pickle.load(f)
 
-# %% Group the data in lists
+# %% Group the sim_data in lists
 sim_data_list = [wbm_sim_data, gbm_1_sim_data, gbm_2_sim_data, full_bbm_sim_data]
 names_list = ["WBM", "GBM1", "GBM2", "Full BBM"]
 processed_data = {x: {} for x in names_list}
@@ -132,7 +133,7 @@ for i in range(num_cols * num_rows):
 # Legend at the top of the plot
 fig.legend(names_list, loc="upper center", ncol=len(names_list))
 fig.set_layout_engine("constrained")
-fig.savefig("data/response_1.pdf")
+fig.savefig("sim_data/response_1.pdf")
 fig.show()
 
 # %% Pairwise comparison: WBM against the GBMs and BBM
@@ -148,7 +149,7 @@ for i in range(num_cols * num_rows):
         axs[i].axis("off")
         continue
 
-    # WBM data
+    # WBM sim_data
     wbm_data = processed_data["WBM"]["OPF"][1][:, i]
     for k, (name, data) in enumerate(processed_data.items()):
         if name == "WBM":
@@ -170,12 +171,12 @@ for i in range(num_cols * num_rows):
 # Legend at the top of the plot
 fig.legend(names_list[1:], loc="upper center", ncol=len(names_list[1:]), bbox_to_anchor=(0.5, 1.1))
 fig.set_layout_engine("constrained")
-fig.savefig("data/response_2.svg", bbox_inches="tight")
+fig.savefig("sim_data/response_2.svg", bbox_inches="tight")
 fig.show()
 
 # %% Plot for the PF
 num_outputs = processed_data["WBM"]["PF"][1].shape[1]
-num_cols = 8
+num_cols = 10
 num_rows = int(np.ceil(num_outputs / num_cols))
 
 line_color = ["black", "orange", "green", "red"]
@@ -193,7 +194,7 @@ for i in range(num_cols * num_rows):
         axs[i].plot(data["PF"][1][:, i], label=name, color=line_color[k], alpha=line_alpha[k])
 
     axs[i].set_title(f"Output {i}")
-    #axs[i].set_ylim(-0.1, 1.1)
+    axs[i].set_ylim(-0.1, 1.1)
 
 # Legend at the bottom of the plot
 fig.set_layout_engine("constrained")
@@ -213,7 +214,7 @@ for i in range(num_cols * num_rows):
         axs[i].axis("off")
         continue
 
-    # WBM data
+    # WBM sim_data
     wbm_data = processed_data["WBM"]["PF"][1][:, i]
     for k, (name, data) in enumerate(processed_data.items()):
         if name == "WBM":
@@ -234,5 +235,5 @@ for i in range(num_cols * num_rows):
 # Legend at the top of the plot
 fig.legend(names_list[1:], loc="upper center", ncol=len(names_list[1:]), bbox_to_anchor=(0.5, 1.1))
 fig.set_layout_engine("constrained")
-fig.savefig("data/response_3.png", bbox_inches="tight", dpi=600)
+fig.savefig("sim_data/response_3.png", bbox_inches="tight", dpi=600)
 fig.show()
