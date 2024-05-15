@@ -271,7 +271,7 @@ for i in range(n_cols * n_rows):
     ax.plot(t, ks_dict[state], "k")
     ax.set_title(pg_state_names[i])
 
-    # If last row, set x label
+    # If last row, set data_bottom_up label
     if i >= n_states - n_cols:
         ax.set_xlabel("Time [s]")
 

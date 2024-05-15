@@ -102,7 +102,7 @@ for i in range(n_rows * n_cols):
     if i % n_cols == 0:
         ax.set_ylabel("Prediction")
 
-    # If last row, add x label and set the x lim
+    # If last row, add data_bottom_up label and set the data_bottom_up lim
     if i >= (n_rows - 1) * n_cols:
         ax.set_xlabel("Real value")
 
