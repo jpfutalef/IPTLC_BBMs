@@ -16,11 +16,22 @@ sim_folder = Path("D:/projects/CPS-SenarioGeneration/data/iptlc/RESTART/if1_dyna
 
 # Create the output folder
 dataset_id = time.strftime("%Y-%m-%d_%H-%M-%S")
-output_folder = Path(f"data/IO-datasets/TLCN/{dataset_id}")
+output_folder = Path(f"data/IO-datasets/TLCN/RESTART_data/{dataset_id}")
 os.makedirs(output_folder, exist_ok=True)
 
 # Open plant
 plant_path = sim_folder.parent / "plant.pkl"
+
+#%% Info.txt file
+info_file = Path(output_folder, "info.txt")
+str_info = f"""Dataset for the TLCN created from the RESTART simulations
+    - Plant: {plant_path}
+    - Simulation folder: {sim_folder}
+    - Output folder: {output_folder}
+"""
+
+with open(info_file, "w") as f:
+    f.write(str_info)
 
 # %% Open plant
 with open(plant_path, "rb") as f:
