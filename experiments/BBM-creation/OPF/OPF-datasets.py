@@ -21,9 +21,10 @@ import greyboxmodels.cpsmodels.Plant as Plant
 print(f"Current working directory: {os.getcwd()}")
 
 # %% Folder containing the sim_data
+# source_folder = Path("D:/projects/Hierarchical_CPS_models/sim_data/simulations/controlled_exponential_pg/20240311_011412/")
 # source_folder = Path("D:/projects/CPS-SenarioGeneration/sim_data/monte_carlo/controlled_power_grid/2024-03-20_18-55-20")
-source_folder = Path("D:/projects/CPS-SenarioGeneration/data/cpg/MonteCarlo/2024-04-03_18-06-45")
-destination_folder = Path("./sim_data/IO-datasets/PF/", source_folder.name)
+source_folder = Path("/data/cpg/MonteCarlo/2024-04-03_18-06-45")
+destination_folder = Path("./sim_data/IO-datasets/OPF/", source_folder.name)
 
 os.makedirs(destination_folder, exist_ok=True)
 
@@ -32,44 +33,32 @@ print(f"[Created] Destination folder: {destination_folder.resolve()}")
 
 
 # %% Functions
-def get_pf_data(filepath: Path):
+def get_opf_data(filepath: Path):
     # Create a function that receives a path to a simulation and returns the inputs and outputs
     # Open the sim_data
     with open(filepath, "rb") as f:
         sim_data = pickle.load(f)
 
-    # Get the plant
-    plant = sim_data["plant"]
-
     # Get the inputs and outputs
-    inputs = []
-    outputs = []
-    for step_dict in sim_data['step_data']:
-        # Input
-        power_demands = step_dict['power_demands']
-        opf_output = step_dict['pg_control_input']
-        x_pg = step_dict['state_post_update'][plant.state_idx.power_grid]
-        u_pg = plant.power_grid.get_pf_inputs(x_pg, power_demands, opf_output)
-        X = np.concatenate(u_pg)
+    opf_inputs = np.array([x['control_center_step_data']["opf_input"] for x in sim_data['step_data']])
+    opf_outputs = np.array([x['control_center_step_data']["opf_output"] for x in sim_data['step_data']])
+    output_names = Plant.get_variables_names(sim_data["plant"].control_center.state_idx)
 
-        # Output is the response
-        Y = step_dict["pg_response"]
+    return opf_inputs, opf_outputs
 
-        # Filter up to column 80 to the end TODO HARDCODED!!!!
-        Y = Y[:80]
 
-        inputs.append(X)
-        outputs.append(Y)
+def get_output_names(filepath: Path):
+    # Open the sim_data
+    with open(filepath, "rb") as f:
+        sim_data = pickle.load(f)
 
-    # Concatenate the inputs and outputs
-    X = np.vstack(inputs)
-    Y = np.vstack(outputs)
+    output_names = Plant.get_variables_names(sim_data["plant"].control_center.state_idx)
 
-    return X, Y, sim_data
+    return output_names
 
 
 # Now, a function that iterates over all the simulations and returns the inputs and outputs in a single numpy array
-def get_pf_data_all(data_folder: Path):
+def get_opf_data_all(data_folder: Path):
     # Create an empty list to store the inputs and outputs
     inputs = []
     outputs = []
@@ -81,19 +70,24 @@ def get_pf_data_all(data_folder: Path):
     # Iterate over all the simulations and get the inputs and outputs for each one
     for f in tqdm.tqdm(target_folders):
         # Get the inputs and outputs
-        pf_inputs, pf_outputs, sim_data = get_pf_data(f)
-        inputs.append(pf_inputs)
-        outputs.append(pf_outputs)
+        opf_inputs, opf_outputs = get_opf_data(f)
+
+        # Append the inputs and outputs to the lists
+        inputs.append(opf_inputs)
+        outputs.append(opf_outputs)
 
     # Concatenate the inputs and outputs
-    inputs_matrix = np.vstack(inputs)
-    outputs_matrix = np.vstack(outputs)
+    inputs_matrix = np.concatenate(inputs, axis=0)
+    outputs_matrix = np.concatenate(outputs, axis=0)
+
+    # Get the output names
+    output_names = get_output_names(target_folders[0])
 
     # Get the plant
     with open(data_folder / "plant.pkl", "rb") as f:
         plant = pickle.load(f)
 
-    return inputs_matrix, outputs_matrix, plant
+    return inputs_matrix, outputs_matrix, plant, output_names
 
 
 # Create a function to normalize an array as above
@@ -110,21 +104,49 @@ def min_max_normalize(array: np.ndarray, min_array: np.ndarray = None, max_array
     return array_normalized, min_array, max_array
 
 
-def get_output_names(filepath: Path):
-    # Open the sim_data
-    with open(filepath, "rb") as f:
-        sim_data = pickle.load(f)
+# %% An example of a simulation
+target_simulation = "simulation_0.pkl"
+target_simulation = source_folder / target_simulation
+print(f"Testing the file: {target_simulation}")
 
-    output_names = Plant.get_variables_names(sim_data["plant"].power_grid.state_idx)
+opf_inputs, opf_outputs = get_opf_data(target_simulation)
+print(f"CC inputs shape: {opf_inputs.shape}")
+print(f"CC outputs shape: {opf_outputs.shape}")
 
-    return output_names
+# %% Get the output names
+opf_output_names = get_output_names(target_simulation)
 
+# Save the output names
+output_names_path = destination_folder / "output_names.pkl"
+with open(output_names_path, "wb") as f:
+    pickle.dump(opf_output_names, f)
+
+# %% Plots of the example
+# Inputs in subplots
+fig, axs = plt.subplots(4, 13, figsize=(20, 10), sharex=True, constrained_layout=True)
+axs = axs.flatten()
+
+for i in range(52):
+    axs[i].plot(opf_inputs[:, i])
+    axs[i].set_title(f"Input {i}")
+
+fig.show()
+
+# Plot the outputs in subplots
+fig, axs = plt.subplots(2, 5, figsize=(20, 10), sharex=True, constrained_layout=True)
+axs = axs.flatten()
+
+for i in range(10):
+    axs[i].plot(opf_outputs[:, i])
+    axs[i].set_title(f"{opf_output_names[i]}")
+
+fig.show()
 
 # %% Develop the datasets using all the simulations
-pf_inputs, pf_outputs, plant = get_pf_data_all(source_folder)
+opf_inputs, opf_outputs, plant, output_names = get_opf_data_all(source_folder)
 
-print(f"CC inputs shape: {pf_inputs.shape}")
-print(f"CC outputs shape: {pf_outputs.shape}")
+print(f"CC inputs shape: {opf_inputs.shape}")
+print(f"CC outputs shape: {opf_outputs.shape}")
 
 # %% Save the inputs and outputs to numpy arrays
 print(f"Saving the inputs and outputs to numpy arrays...")
@@ -132,13 +154,18 @@ print(f"    Destination folder: {destination_folder.resolve()}")
 
 inputs_path = destination_folder / "input.npy"
 outputs_path = destination_folder / "output.npy"
+output_names_path = destination_folder / "output_names.pkl"
 
-np.save(inputs_path, pf_inputs)
-np.save(outputs_path, pf_outputs)
+np.save(inputs_path, opf_inputs)
+np.save(outputs_path, opf_outputs)
+
+# Also, save the output names
+with open(output_names_path, "wb") as f:
+    pickle.dump(output_names, f)
 
 # %% Normalize the inputs and outputs
-inputs_normalized, min_input, max_input = min_max_normalize(pf_inputs)
-outputs_normalized, min_output, max_output = min_max_normalize(pf_outputs)
+opf_inputs_normalized, min_opf_input, max_opf_input = min_max_normalize(opf_inputs)
+opf_outputs_normalized, min_opf_output, max_opf_output = min_max_normalize(opf_outputs)
 
 # %% Save the normalized inputs and outputs to numpy arrays
 print(f"Saving the normalized inputs and outputs to numpy arrays...")
@@ -146,28 +173,16 @@ print(f"    Destination folder: {destination_folder.resolve()}")
 inputs_normalized_path = destination_folder / "input_normalized.npy"
 outputs_normalized_path = destination_folder / "output_normalized.npy"
 
-np.save(inputs_normalized_path, inputs_normalized)
-np.save(outputs_normalized_path, outputs_normalized)
+np.save(inputs_normalized_path, opf_inputs_normalized)
+np.save(outputs_normalized_path, opf_outputs_normalized)
 
 # Also, save the min and max values
-min_max_values = {"input_min": min_input,
-                  "input_max": max_input,
-                  "output_min": min_output,
-                  "output_max": max_output,
+min_max_values = {"input_min": min_opf_input,
+                  "input_max": max_opf_input,
+                  "output_min": min_opf_output,
+                  "output_max": max_opf_output,
                   "type": "min_max"}
 
 min_max_values_path = destination_folder / "normalization_spec.pkl"
 with open(min_max_values_path, "wb") as f:
     pickle.dump(min_max_values, f)
-
-# %% Construct a dataset without the binary variables at the output
-# Get the indices of the binary variables
-binary_indices = plant.power_grid.state_idx.get_binary_indices()
-
-# Filter
-output_no_binary = np.delete(pf_outputs, binary_indices, axis=1)
-output_no_binary_normalized = np.delete(outputs_normalized, binary_indices, axis=1)
-
-# Save the dataset
-output_no_binary_path = destination_folder / "output_no_binary.npy"
-output_no_binary_normalized_path = destination_folder / "output_no_binary_normalized.npy"

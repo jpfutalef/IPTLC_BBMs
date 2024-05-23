@@ -12,7 +12,7 @@ import sys
 
 #%% Specify locations
 # sim_folder = Path("D:/projects/CPS-SenarioGeneration/data/iptlc/MonteCarlo/2024-05-09_15-16-30")
-sim_folder = Path("D:/projects/CPS-SenarioGeneration/data/iptlc/RESTART/if1_dynamic_network_level_vulnerability/2024-05-09_15-09-08/scenarios")
+sim_folder = Path("/data/iptlc/RESTART/if1_dynamic_network_level_vulnerability/2024-05-09_15-09-08/scenarios")
 
 # Create the output folder
 dataset_id = time.strftime("%Y-%m-%d_%H-%M-%S")
