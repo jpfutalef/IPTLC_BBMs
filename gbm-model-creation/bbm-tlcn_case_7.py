@@ -59,17 +59,18 @@ if __name__ == '__main__':
     import xgboost as xgb
 
     # Specify locations of the files
-    save_to = "data/bb-models/tlcn_case7_wbm.pkl"
+    save_to = "data/bb-models/tlcn_case7_bbm.pkl"
 
     # Location of the metamodel
     mm_loc = "models/TLCN/RESTART_model.json"
 
     # Load
-    mm = xgb.XGBClassifier()
+    mm = xgb.XGBClassifier(device="cuda")
     mm.load_model(mm_loc)
 
     # Add to the dictionary of origin-destination pairs
-    d = {(5, 6): mm, (6, 5): mm}
+    d = {(5, 6): mm,
+         (6, 5): mm}
 
     # Create the case
     plant = case(d)
