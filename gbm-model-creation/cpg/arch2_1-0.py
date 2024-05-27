@@ -16,10 +16,11 @@ if __name__ == '__main__':
     # Specify locations of the files
     pg_loc = "D:/projects/IPTLC_BBMs/data/bb-models/pg_ieee14_bbm_deterministic.pkl"
     cc_loc = "D:/projects/Hierarchical_CPS_models/data/wbm-models/cc_ieee14_wbm.pkl"
-    cpg_loc = "D:/projects/IPTLC_BBMs/data/gb-models/cpg/arch2_1-0.pkl"
+
+    save_to = "D:/projects/IPTLC_BBMs/data/gb-models/cpg/arch2_1-0.pkl"
 
     # Create the cc
     cpg = case(pg_loc, cc_loc)
 
     # Save the model
-    cpg.save(cpg_loc)
+    cpg.save(save_to)
