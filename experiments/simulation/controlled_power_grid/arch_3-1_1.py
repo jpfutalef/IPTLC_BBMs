@@ -6,7 +6,7 @@ from simulation_parameters import *
 SIM_PLANT = Plant.load("data/gb-models/cpg/arch3_1-1.pkl")
 
 #%% Specify saving location
-SAVE_TO = f"data/gbm-simulations/MonteCarlo/arch3_1-1/{NOW}"
+SAVE_TO = f"data/gbm-simulations/cpg/arch3_1-1/{NOW}"
 
 # %% Run simulation
 if __name__ == '__main__':
