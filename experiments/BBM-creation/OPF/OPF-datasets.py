@@ -22,7 +22,7 @@ print(f"Current working directory: {os.getcwd()}")
 
 # %% Folder containing the sim_data
 # source_folder = Path("D:/projects/Hierarchical_CPS_models/sim_data/simulations/controlled_exponential_pg/20240311_011412/")
-# source_folder = Path("D:/projects/CPS-SenarioGeneration/sim_data/monte_carlo/controlled_power_grid/2024-03-20_18-55-20")
+# source_folder = Path("D:/projects/CPS-SenarioGeneration/sim_data/monte_carlo/cpg/2024-03-20_18-55-20")
 source_folder = Path("/data/cpg/MonteCarlo/2024-04-03_18-06-45")
 destination_folder = Path("./sim_data/IO-datasets/OPF/", source_folder.name)
 

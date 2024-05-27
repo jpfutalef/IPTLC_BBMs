@@ -46,9 +46,9 @@ def process_folder(folder):
 
 # %% Test the computational load
 wbm_info = process_folder("D:/projects/CPS-SenarioGeneration/sim_data/cpg/MonteCarlo/2024-04-03_18-06-45/")
-gbm1_info = process_folder("sim_data/gbm_simulations/controlled_power_grid/arch_1-0_1/2024-04-08_14-14-09")
-gbm2_info = process_folder("sim_data/gbm_simulations/controlled_power_grid/arch_2-1_0/BBM1_SimpleNet/2024-04-08_02-00-59")
-gbm3_info = process_folder("sim_data/gbm_simulations/controlled_power_grid/arch_3-1_1/2024-04-08_02-00-59")
+gbm1_info = process_folder("sim_data/gbm-simulations/cpg/arch_1-0_1/2024-04-08_14-14-09")
+gbm2_info = process_folder("sim_data/gbm-simulations/cpg/arch_2-1_0/BBM1_SimpleNet/2024-04-08_02-00-59")
+gbm3_info = process_folder("sim_data/gbm-simulations/cpg/arch_3-1_1/2024-04-08_02-00-59")
 
 #%% Group
 info_list = [wbm_info, gbm1_info, gbm2_info, gbm3_info]

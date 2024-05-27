@@ -13,23 +13,23 @@ with open(wbm_target_sim, "rb") as f:
     wbm_sim_data = pickle.load(f)
 
 # %% Architecture 1
-# gbm_1_sim_folder = Path("sim_data/gbm_simulations/controlled_power_grid/arch_1-0_1/2024-04-08_14-14-09")
-gbm_1_sim_folder = Path("sim_data/gbm_simulations/controlled_power_grid/arch_1-0_1/2024-04-19_12-44-30")
-# gbm_1_sim_folder = Path("sim_data/gbm_simulations/controlled_power_grid/arch_1-0_1/BBM1_SimpleNet/2024-04-08_14-02-43")
+# gbm_1_sim_folder = Path("sim_data/gbm-simulations/cpg/arch_1-0_1/2024-04-08_14-14-09")
+gbm_1_sim_folder = Path("sim_data/gbm-simulations/cpg/arch_1-0_1/2024-04-19_12-44-30")
+# gbm_1_sim_folder = Path("sim_data/gbm-simulations/cpg/arch_1-0_1/BBM1_SimpleNet/2024-04-08_14-02-43")
 gbm_1_target_sim = gbm_1_sim_folder / target_simulation
 
 with open(gbm_1_target_sim, "rb") as f:
     gbm_1_sim_data = pickle.load(f)
 
 # %% Architecture 2
-gbm_2_sim_folder = Path("sim_data/gbm_simulations/controlled_power_grid/arch_2-1_0/2024-04-08_02-00-59")
+gbm_2_sim_folder = Path("sim_data/gbm-simulations/cpg/arch_2-1_0/2024-04-08_02-00-59")
 gbm_2_target_sim = gbm_2_sim_folder / target_simulation
 
 with open(gbm_2_target_sim, "rb") as f:
     gbm_2_sim_data = pickle.load(f)
 
 # %% Full BBM
-full_bbm_sim_folder = Path("sim_data/gbm_simulations/controlled_power_grid/arch_3-1_1/2024-04-08_02-00-59")
+full_bbm_sim_folder = Path("sim_data/gbm-simulations/cpg/arch_3-1_1/2024-04-08_02-00-59")
 full_bbm_target_sim = full_bbm_sim_folder / target_simulation
 
 with open(full_bbm_target_sim, "rb") as f:

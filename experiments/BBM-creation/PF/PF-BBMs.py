@@ -16,8 +16,8 @@ print(f"Device: {device}")
 
 
 #%% Specify the paths
-# datasets_folder = Path("sim_data/IO-datasets/PF/2024-03-20_18-55-20")
-datasets_folder = Path("sim_data/IO-datasets/PF/2024-04-03_18-06-45")
+# datasets_folder = Path("data/IO-datasets/PF/2024-03-20_18-55-20")
+datasets_folder = Path("data/IO-datasets/PF/2024-04-03_18-06-45")
 model_folder = Path("models/PF/").resolve()
 
 print(f"Datasets folder: {datasets_folder}")

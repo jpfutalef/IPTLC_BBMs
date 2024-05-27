@@ -11,7 +11,7 @@ import greyboxmodels.cpsmodels.cyber.ControlCenter as CC
 import greyboxmodels.cpsmodels.physical.electrical.PowerFlowPowerGrid as PG
 
 #%% Specify locations of the files
-bbm_dir = Path("data/bbm-models/control_center_bbm.pkl")
+bbm_dir = Path("data/gbm-model-creation/control_center_bbm.pkl")
 
 #%% Create the objects
 pg = PG.PowerGridExponential()
