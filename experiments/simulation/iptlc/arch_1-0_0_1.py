@@ -4,6 +4,7 @@ from simulation_parameters import *
 
 # %% Load the plant
 SIM_PLANT = Plant.load("data/gb-models/iptlc/arch_1-0_0_1.pkl")
+SIM_PLANT.step_top_down = False
 
 # %% Specify saving location
 SAVE_TO = f"data/gbm-simulations/iptlc/arch_1-0_0_1/{NOW}"
