@@ -12,11 +12,11 @@ SIM_MISSION_TIME = 3600 * 24 * 4
 SIM_STEP_TIME = 15 * 60
 SIM_INITIAL_TIME = 0.
 MAX_EXECUTION_TIME = 3600 * 10
-NOW = time.strftime('%Y-%m-%d_%H-%M-%S')
 
 # WBM data location
 wbm_repo_root = Path("D:/projects/CPS-SenarioGeneration")
 wbm_simulations = wbm_repo_root / "data/iptlc/MonteCarlo/2024-05-09_15-16-30/"
+NOW = wbm_simulations.name
 
 try:
     initial_condition_loc = wbm_repo_root / "data/iptlc/initial_condition.npy"
