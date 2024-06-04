@@ -30,16 +30,22 @@ except FileNotFoundError:
     SIM_INITIAL_CONDITION = None
     EXTERNAL_STIMULI = None
 
-# %% Set up the simulator with the references
-# Open the plant
+# %% Set up the plant
 simulation_path = wbm_simulations / "plant.pkl"
 with open(simulation_path, "rb") as f:
     wbm_plant = pickle.load(f)
 
+# %% Indices to force
+controlled_inputs_idx = None
+external_stimuli_idx = "all"
+
 # The the target state indices for the power grid
 pg = wbm_plant.power_grid
 pg_idx = wbm_plant.state_idx.power_grid
-pi_pg_idx = np.concatenate((pg.state_idx.piGen, pg.state_idx.piLine, pg.state_idx.piTrafo))
+pi_pg_idx = np.concatenate((pg.state_idx.piGen,
+                            pg.state_idx.piLine,
+                            pg.state_idx.piTrafo
+                            ))
 target_pg = pg_idx[pi_pg_idx]
 
 # The the target state indices for the telecommunication network
@@ -54,11 +60,7 @@ target_tlcn = np.concatenate((tlcn_bottom_up_idx[tlcn_idx], tlcn_top_down_idx[tl
 # Concatenate the target states
 state_idx = np.concatenate((target_pg, target_tlcn))
 
-# %% Indices to force
-controlled_inputs_idx = None
-external_stimuli_idx = "all"
-
-# Create the simulator
+# %% Create the simulator
 SIMULATOR = Simulator.SimulatorWithReference(reference_folder=wbm_simulations,
                                              state_idx=state_idx,
                                              external_stimuli_idx=external_stimuli_idx,

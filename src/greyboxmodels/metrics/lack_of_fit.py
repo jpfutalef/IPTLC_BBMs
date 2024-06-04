@@ -1,4 +1,5 @@
 import numpy as np
+from pathlib import Path
 
 
 def ks_statistic(ecdf_1, ecdf_2):
@@ -124,3 +125,86 @@ def lack_of_fit(data1, data2, n_bins=50, return_info=False):
         return lof, info
 
     return lof
+
+
+def lack_of_fit_folder(target_folder, reference_distributions):
+    pass
+
+
+if __name__ == '__main__':
+    import os
+
+    ref_folder = Path("D:/projects/CPS-SenarioGeneration/data/iptlc/MonteCarlo/2024-05-09_15-16-30")
+    target_folder = Path("D:/projects/CPS-SenarioGeneration/data/iptlc/MonteCarlo/2024-05-09_15-16-30")
+    print("--- WBM ---")
+    lof = lack_of_fit_folder(target_folder, ref_folder)
+    print(f"Average lack of fit: {lof}")
+
+    save_results_to = Path("data/voi_losses") / target_folder.name / "l1"
+    os.makedirs(save_results_to, exist_ok=True)
+
+    with open(save_results_to / "wbm.txt", "w") as f:
+        f.write(f"Average computational load: {lof}")
+
+    ##########
+    target_folder = "data/gbm-simulations/iptlc/arch_1-0_0_1/2024-05-09_15-16-30"
+    print("--- GBM1 ---")
+    lof = lack_of_fit_folder(target_folder)
+    print(f"Average lack of fit: {lof}")
+
+    with open(save_results_to / "gbm1.txt", "w") as f:
+        f.write(f"Average computational load: {lof}")
+
+    ##########
+    target_folder = "data/gbm-simulations/iptlc/arch_2-1_0_0/2024-05-09_15-16-30"
+    print("--- GBM2 ---")
+    lof = lack_of_fit_folder(target_folder)
+    print(f"Average lack of fit: {lof}")
+
+    with open(save_results_to / "gbm2.txt", "w") as f:
+        f.write(f"Average computational load: {lof}")
+
+    ##########
+    target_folder = "data/gbm-simulations/iptlc/arch_3-1_0_1/2024-05-09_15-16-30"
+    print("--- GBM3 ---")
+    lof = lack_of_fit_folder(target_folder)
+    print(f"Average lack of fit: {lof}")
+
+    with open(save_results_to / "gbm3.txt", "w") as f:
+        f.write(f"Average computational load: {lof}")
+
+    ##########
+    target_folder = "data/gbm-simulations/iptlc/arch_4-0_1_0/2024-05-09_15-16-30"
+    print("--- GBM4 ---")
+    lof = lack_of_fit_folder(target_folder)
+    print(f"Average lack of fit: {lof}")
+
+    with open(save_results_to / "gbm4.txt", "w") as f:
+        f.write(f"Average computational load: {lof}")
+
+    ##########
+    target_folder = "data/gbm-simulations/iptlc/arch_5-0_1_1/2024-05-09_15-16-30"
+    print("--- GBM5 ---")
+    lof = lack_of_fit_folder(target_folder)
+    print(f"Average lack of fit: {lof}")
+
+    with open(save_results_to / "gbm5.txt", "w") as f:
+        f.write(f"Average computational load: {lof}")
+
+    ##########
+    target_folder = "data/gbm-simulations/iptlc/arch_6-1_1_0/2024-05-09_15-16-30"
+    print("--- GBM6 ---")
+    lof = lack_of_fit_folder(target_folder)
+    print(f"Average lack of fit: {lof}")
+
+    with open(save_results_to / "gbm6.txt", "w") as f:
+        f.write(f"Average computational load: {lof}")
+
+    ##########
+    target_folder = "data/gbm-simulations/iptlc/arch_7-1_1_1/2024-05-09_15-16-30"
+    print("--- GBM7 ---")
+    lof = lack_of_fit_folder(target_folder)
+    print(f"Average lack of fit: {lof}")
+
+    with open(save_results_to / "gbm7.txt", "w") as f:
+        f.write(f"Average computational load: {lof}")
