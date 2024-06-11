@@ -130,6 +130,27 @@ def lack_of_fit(data1, data2, n_bins=50, return_info=False):
 def lack_of_fit_folder(target_folder, reference_distributions):
     pass
 
+def lack_of_fit_comparison(folders, names=None):
+    """
+    Compares the lack of fit between folders
+    :param folders: list of folders
+    :return: the comparison
+    """
+    import pandas as pd
+    info = {}
+    av_loads = {}
+    for folder in folders:
+        print(f"    ------- Computing for {folder} -------")
+        avg_load, folder_info = computational_load_folder(folder)
+        folder_info["avg_load"] = avg_load
+        info[folder] = folder_info
+
+        # Save the results to the table
+        av_loads[folder] = avg_load
+
+    # create table
+    df = pd.DataFrame.from_dict(av_loads, orient="index")
+
 
 if __name__ == '__main__':
     import os
