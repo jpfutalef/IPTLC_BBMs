@@ -11,28 +11,14 @@ import matplotlib.pyplot as plt
 import json
 
 
-def ks_statistic(data, data_ref, n_bins=50):
+def ks_statistic(data1, data_ref, n_bins=50):
     """
     Compute the Kolmogorov-Smirnov statistic between two empirical cumulative distribution functions.
 
     """
-
-    # Check if the array contains the same values
-    n_min = min(len(data), len(data_ref))
-    comparison = sum(np.equal(data[:n_min], data_ref[:n_min]))
-    if comparison == n_min:
-        return 0., {"location": data[0],
-                   "ks_value": 0,
-                   "bins": np.nan,
-                   "epdf1": np.nan,
-                   "epdf_ref": np.nan,
-                   "ecdf1": np.nan,
-                   "ecdf_ref": np.nan,
-                   "abs_diff": np.nan}
-
     # Generate empirical PDF
-    bins = np.linspace(min(data.min(), data_ref.min()), max(data.max(), data_ref.max()), n_bins)
-    epdf1, _ = np.histogram(data, bins=bins, density=True)
+    bins = np.linspace(min(data1.min(), data_ref.min()), max(data1.max(), data_ref.max()), n_bins)
+    epdf1, _ = np.histogram(data1, bins=bins, density=True)
     epdf_ref, _ = np.histogram(data_ref, bins=bins, density=True)
 
     # Compute the empirical CDF
@@ -390,14 +376,11 @@ def folders_comparison(folders,
 
         # Save the results to the table
         data[folder] = val
-        info[folder] = {"per state": val_per_state,
-                        "detailed_info": lof_info,
-                        "lack_of_fit": val}
+        info[folder] = {"per state": val_per_state, "detailed_info": lof_info}
 
         print(f"    Done!")
 
     # create table
-    print("Creating the table of results...")
     df = pd.DataFrame.from_dict(data, orient="index")
     df.columns = ["Lack of fit"]
     if names is not None:
@@ -406,13 +389,10 @@ def folders_comparison(folders,
     # Save the table
     table_filepath = save_in / "lack_of_fit.csv"
     df.to_csv(table_filepath)
-    print(f"    Table saved at {table_filepath}")
 
     # Save the info
-    print("Saving the detailed information...")
     info_filepath = save_in / "lack_of_fit_info.pkl"
     with open(info_filepath, "wb") as f:
         pickle.dump(info, f)
-    print(f"    Detailed information saved at {info_filepath}")
 
     return df, info

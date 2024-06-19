@@ -8,6 +8,7 @@ import dill as pickle
 import numpy as np
 from pathlib import Path
 import tqdm
+import multiprocessing as mp
 
 
 def computational_load(t_sim, t_exec):
@@ -45,20 +46,6 @@ def get_execution_time_data(sim_data):
     return t_sim, t_exec
 
 
-def get_computational_load_from_simulation_file(file_path):
-    """
-    Computes the computational load from a simulation file
-    :param file_path: the path to the simulation file
-    :return: the computational load
-    """
-    with open(file_path, "rb") as f:
-        sim_data = pickle.load(f)
-
-    sim_time, exec_time = get_execution_time_data(sim_data)
-    comp_load = computational_load(sim_time, exec_time)
-    return comp_load
-
-
 def computational_load_folder(folder):
     """
     Iterates all files in the folder and computes the average computational load
@@ -67,40 +54,56 @@ def computational_load_folder(folder):
     # Get all files in the folder
     files = [x for x in Path(folder).iterdir() if x.is_file() and x.suffix == ".pkl"]
 
-    # Initialize the computational load
+    # Get cores
+    n_cores = mp.cpu_count()
+
+    # Do task with tqdm and pool
+    with mp.Pool(n_cores) as pool:
+        results = list(tqdm.tqdm(pool.imap(read_computational_load, files), total=len(files)))
+
+    # Iterate the results
     cum_comp_load = 0
     n_files = 0
     info = {}
-    for file in tqdm.tqdm(files):
-        try:
-            with open(file, "rb") as f:
-                sim_data = pickle.load(f)
+    for file, result in tqdm.tqdm(zip(files, results), total=len(files)):
+        if result is None:
+            continue
 
-            t_sim, t_exec = get_execution_time_data(sim_data)
-            comp_load = computational_load(t_sim, t_exec)
+        # Save info
+        info[file] = {"comp_load": result[0],
+                      "sim_time": result[1],
+                      "exec_time": result[2]}
 
-            # Save info
-            info[file] = {"comp_load": comp_load,
-                          "sim_time": t_sim,
-                          "exec_time": t_exec}
-
-            cum_comp_load += comp_load
-            n_files += 1
-
-        except Exception as e:
-            print(f"Error processing file {file}: {e}")
+        cum_comp_load += result[0]
+        n_files += 1
 
     # Compute
     avg_comp_load = cum_comp_load / n_files if n_files > 0 else 0
 
-    print(f"Processed {n_files} files")
-    print(f"Total cumulative computational load: {cum_comp_load}")
-    print(f"Average computational load: {avg_comp_load}")
+    print(f"    Processed {n_files} files")
+    print(f"    Total cumulative computational load: {cum_comp_load}")
+    print(f"    Average computational load: {avg_comp_load}")
 
     return cum_comp_load / n_files, info
 
 
-def folders_comparison(folders, names=None, save_to=None):
+def read_computational_load(file_path):
+    try:
+        with open(file_path, "rb") as f:
+            sim_data = pickle.load(f)
+
+        t_sim, t_exec = get_execution_time_data(sim_data)
+        comp_load = computational_load(t_sim, t_exec)
+        return comp_load, t_sim, t_exec
+
+    except Exception as e:
+        print(f"Error processing file {file_path}: {e}")
+        return None
+
+
+def folders_comparison(folders,
+                       names=None,
+                       save_to=None):
     """
     Compares the computational load between folders
     :param folders: list of folders
@@ -110,7 +113,7 @@ def folders_comparison(folders, names=None, save_to=None):
     info = {}
     av_loads = {}
     for folder in folders:
-        print(f"    ------- Computing for {folder} -------")
+        print(f"------- Computing for {folder} -------")
         avg_load, folder_info = computational_load_folder(folder)
         folder_info["avg_load"] = avg_load
         info[folder] = folder_info
