@@ -82,7 +82,7 @@ def lack_of_fit(data,
     Compute the lack of fit between two datasets.
     :param data: dictionary of data points indexed by time
     :param reference_data: dictionary of reference data points indexed by time
-    :param state_filter: a function to filter the states to compare
+    :param state_filter: a function that returns True if the state should be filtered out
     :return: the lack of fit
     """
     # Loop over the values to compute the empirical distributions
