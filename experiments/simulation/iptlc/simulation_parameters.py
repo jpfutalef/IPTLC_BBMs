@@ -6,7 +6,7 @@ import numpy as np
 from pathlib import Path
 import time
 
-from greyboxmodels.scenariogeneration import Simulator
+from greyboxmodels.scenariogeneration import DeterministicSimulator
 
 SIM_MISSION_TIME = 3600 * 24 * 4
 SIM_STEP_TIME = 15 * 60
