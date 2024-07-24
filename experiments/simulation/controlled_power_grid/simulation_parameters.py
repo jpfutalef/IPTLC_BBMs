@@ -5,6 +5,8 @@ import dill as pickle
 import numpy as np
 from pathlib import Path
 import time
+import sys
+import os
 
 SIM_MISSION_TIME = 3600 * 24 * 4
 SIM_STEP_TIME = 15 * 60
@@ -13,8 +15,13 @@ MAX_EXECUTION_TIME = 3600 * 8
 NUMBER_OF_TRIALS = float("inf")
 NOW = time.strftime('%Y-%m-%d_%H-%M-%S')
 
-# WBM data location
-wbm_data_loc = Path("D:/projects/CPS-SenarioGeneration")
+# Locations
+scenario_generation_loc = Path(os.environ["SCENARIOGENERATION_ROOT"])
+wbm_data_loc = Path(os.environ["MODELS_ROOT"])
+
+# Reference simulation data
+# ref_data_folder = wbm_data_loc / "data/cpg/reference_simulation"
+ref_data_folder = wbm_data_loc / "data/cpg/reference_simulation"
 
 try:
     initial_condition_loc = wbm_data_loc / "data/cpg/initial_condition.npy"

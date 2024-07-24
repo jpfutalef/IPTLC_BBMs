@@ -31,8 +31,8 @@ except FileNotFoundError:
     EXTERNAL_STIMULI = None
 
 # %% Set up the plant
-simulation_path = wbm_simulations / "plant.pkl"
-with open(simulation_path, "rb") as f:
+wbm_plant_path = wbm_simulations / "plant.pkl"
+with open(wbm_plant_path, "rb") as f:
     wbm_plant = pickle.load(f)
 
 # %% Indices to force
@@ -61,10 +61,10 @@ target_tlcn = np.concatenate((tlcn_bottom_up_idx[tlcn_idx], tlcn_top_down_idx[tl
 state_idx = np.concatenate((target_pg, target_tlcn))
 
 # %% Create the simulator
-SIMULATOR = Simulator.SimulatorWithReference(reference_folder=wbm_simulations,
-                                             state_idx=state_idx,
-                                             external_stimuli_idx=external_stimuli_idx,
-                                             control_inputs=controlled_inputs_idx)
+SIMULATOR = DeterministicSimulator.SimulatorWithReference(reference_folder=wbm_simulations,
+                                                          state_idx=state_idx,
+                                                          external_stimuli_idx=external_stimuli_idx,
+                                                          control_inputs=controlled_inputs_idx)
 SIMULATOR.x0 = SIM_INITIAL_CONDITION
 SIMULATOR.mission_time = SIM_MISSION_TIME
 SIMULATOR.step_time = SIM_STEP_TIME
