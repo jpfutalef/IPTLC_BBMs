@@ -16,8 +16,8 @@ print(f"Device: {device}")
 
 
 #%% Specify the paths
-# datasets_folder = Path("data/IO-datasets/PF/2024-03-20_18-55-20")
-datasets_folder = Path("data/IO-datasets/PF/2024-04-03_18-06-45")
+# datasets_folder = Path("data/IO-datasets_development/PF/2024-03-20_18-55-20")
+datasets_folder = Path("data/IO-datasets_development/PF/2024-04-03_18-06-45")
 model_folder = Path("models/PF/").resolve()
 
 print(f"Datasets folder: {datasets_folder}")
@@ -27,10 +27,10 @@ print(f"Model folder: {model_folder}")
 #%% Set up the BBM creator]
 BBM_creator = creator.BBMCreator()
 
-# Set up the datasets
+# Set up the datasets_development
 dataset_name = f"{datasets_folder.parent.name}_{datasets_folder.name}"
 
-# Load the datasets
+# Load the datasets_development
 try:
     print(f"Loading dataloaders from {model_folder}")
     with open(model_folder / f"dataloaders_{dataset_name}.pth", "rb") as f:

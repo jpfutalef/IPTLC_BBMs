@@ -1,7 +1,7 @@
 from pathlib import Path
 import torch
 
-dataset_location = Path("data/IO-datasets/TLCN/2024-05-10_11-21-50/dataset_bottom_up.pt")
+dataset_location = Path("data/IO-datasets_development/TLCN/2024-05-10_11-21-50/dataset_bottom_up.pt")
 dataset = torch.load(dataset_location)
 
 #%% Setup device and dataloaders

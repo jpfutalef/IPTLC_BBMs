@@ -113,7 +113,7 @@ if __name__ == '__main__':
 
     # Specify the locations of the metamodels and normalization specs
     pf_mm_location = "D:/projects/IPTLC_BBMs/models/BBM1_SimpleNet_PF_2024-04-03_18-06-45_20240408-010659.pt"
-    norm_spec_loc = "D:/projects/IPTLC_BBMs/data/training-datasets/PF/2024-04-03_18-06-45/normalization_spec.pkl"
+    norm_spec_loc = "D:/projects/IPTLC_BBMs/data/training-datasets_development/PF/2024-04-03_18-06-45/normalization_spec.pkl"
 
     # Load the metamodel
     pf_mm = BBM1_SimpleNet(57, 80)

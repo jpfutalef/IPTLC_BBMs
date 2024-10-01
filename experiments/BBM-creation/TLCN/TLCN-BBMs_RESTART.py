@@ -9,14 +9,16 @@ from sklearn.multioutput import MultiOutputClassifier
 from sklearn.metrics import roc_auc_score
 from sklearn.model_selection import RandomizedSearchCV
 
+import os
 import numpy as np
 import sys
 import matplotlib.pyplot as plt
 import time
 
 # %% Locations and data loading
-# dataset_location = Path("data/IO-datasets/TLCN/2024-05-10_13-10-13/dataset_array_bottom_up.pt") # MCS
-dataset_location = Path("data/IO-datasets/TLCN/RESTART_data/2024-05-16_11-56-28/dataset_array_bottom_up.pt")  # RESTART
+bbm_root = Path(os.environ['BBM_ROOT'])
+# dataset_location = Path("data/IO-datasets_development/TLCN/2024-05-10_13-10-13/dataset_array_bottom_up.pt") # MCS
+dataset_location = bbm_root / "data/IO-datasets_development/TLCN/RESTART_data/2024-05-16_11-56-28/dataset_array_bottom_up.pt"  # RESTART
 
 # %% Try opening the dataset. If it fails, try loading it as a numpy array
 try:
@@ -26,6 +28,8 @@ try:
 
     X = np.load(str(X_loc))
     y = np.load(str(y_loc))
+
+    print("Loaded the dataset as a numpy array!")
 
 except FileNotFoundError:
     print("Not found. Loading the dataset as a torch array...")
@@ -40,6 +44,8 @@ except FileNotFoundError:
     # Save as numpy arrays
     np.save(str(dataset_location.parent / "np_array_X.npy"), X)
     np.save(str(dataset_location.parent / "np_array_y.npy"), y)
+
+    print("Loaded the dataset as a torch array!")
 
 print(f"Full input size: {X.shape}")
 

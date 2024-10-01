@@ -1,10 +1,11 @@
+"""
+A script to create the specific Input-Output dataset for the TLCN from tabular data obtained from simulations.
+"""
+
 import os
 from pathlib import Path
 import dill as pickle
 import numpy as np
-from torch_geometric import utils
-from torch_geometric.data import Data
-from torch_geometric.loader import DataLoader
 import time
 import torch
 import tqdm
@@ -158,7 +159,7 @@ sim_files = [x for x in sim_folder.iterdir() if x.suffix == ".pkl" and "simulati
 #
 # # Save
 # now = time.strftime("%Y-%m-%d_%H-%M-%S")
-# output_folder = Path(f"data/IO-datasets/TLCN/{now}")
+# output_folder = Path(f"data/IO-datasets_development/TLCN/{now}")
 #
 # os.makedirs(output_folder, exist_ok=True)
 #

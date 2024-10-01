@@ -14,8 +14,8 @@ device = creator.get_device()
 print(f"Device: {device}")
 
 #%% Specify the paths
-#datasets_folder = Path("sim_data/IO-datasets/OPF/2024-03-20_18-55-20").resolve()
-datasets_folder = Path("sim_data/IO-datasets/OPF/2024-04-03_18-06-45").resolve()
+#datasets_folder = Path("sim_data/IO-datasets_development/OPF/2024-03-20_18-55-20").resolve()
+datasets_folder = Path("sim_data/IO-datasets_development/OPF/2024-04-03_18-06-45").resolve()
 model_folder = Path("models/OPF/").resolve()
 
 print(f"Datasets folder: {datasets_folder}")
@@ -24,10 +24,10 @@ print(f"Model folder: {model_folder}")
 #%% Set up the BBM creator
 BBM_creator = creator.BBMCreator()
 
-# Set up the datasets
+# Set up the datasets_development
 dataset_name = f"{datasets_folder.parent.name}_{datasets_folder.name}"
 
-# Load the datasets
+# Load the datasets_development
 try:
     print(f"Loading dataloaders from {model_folder}")
     with open(model_folder / f"dataloaders_{dataset_name}.pth", "rb") as f:

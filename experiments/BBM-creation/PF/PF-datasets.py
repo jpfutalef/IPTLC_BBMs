@@ -1,5 +1,5 @@
 """
-A script to develop the datasets to train a sim_data-driven model (surrogate model) for the Optimal Power Flow (OPF) problem.
+A script to develop the datasets_development to train a sim_data-driven model (surrogate model) for the Optimal Power Flow (OPF) problem.
 
 The goal is to generate the inputs and outputs for the OPF problem, normalize them, and save them to files.
 
@@ -23,7 +23,7 @@ print(f"Current working directory: {os.getcwd()}")
 # %% Folder containing the sim_data
 # source_folder = Path("D:/projects/CPS-SenarioGeneration/sim_data/monte_carlo/cpg/2024-03-20_18-55-20")
 source_folder = Path("/data/cpg/MonteCarlo/2024-04-03_18-06-45")
-destination_folder = Path("./sim_data/IO-datasets/PF/", source_folder.name)
+destination_folder = Path("./sim_data/IO-datasets_development/PF/", source_folder.name)
 
 os.makedirs(destination_folder, exist_ok=True)
 
@@ -120,7 +120,7 @@ def get_output_names(filepath: Path):
     return output_names
 
 
-# %% Develop the datasets using all the simulations
+# %% Develop the datasets_development using all the simulations
 pf_inputs, pf_outputs, plant = get_pf_data_all(source_folder)
 
 print(f"CC inputs shape: {pf_inputs.shape}")

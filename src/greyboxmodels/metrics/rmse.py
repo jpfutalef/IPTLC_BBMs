@@ -65,7 +65,7 @@ def lack_of_fit(data,
                 state_filter: callable = None,
                 ):
     """
-    Compute the lack of fit between two datasets.
+    Compute the lack of fit between two datasets_development.
     :param data: dictionary of data points indexed by time
     :param reference_data: dictionary of reference data points indexed by time
     :param state_filter: a function to filter the states to compare

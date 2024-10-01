@@ -28,7 +28,8 @@ def ks_statistic(data, data_ref, n_bins=50):
                    "epdf_ref": np.nan,
                    "ecdf1": np.nan,
                    "ecdf_ref": np.nan,
-                   "abs_diff": np.nan}
+                   "abs_diff": np.nan
+                    }
 
     # Generate empirical PDF
     bins = np.linspace(min(data.min(), data_ref.min()), max(data.max(), data_ref.max()), n_bins)
@@ -79,7 +80,7 @@ def lack_of_fit(data,
                 state_filter: callable = None,
                 ):
     """
-    Compute the lack of fit between two datasets.
+    Compute the lack of fit between two datasets_development.
     :param data: dictionary of data points indexed by time
     :param reference_data: dictionary of reference data points indexed by time
     :param state_filter: a function that returns True if the state should be filtered out

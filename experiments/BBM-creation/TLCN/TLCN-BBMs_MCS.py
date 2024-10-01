@@ -12,8 +12,8 @@ import matplotlib.pyplot as plt
 import time
 
 #%% Locations and data loading
-dataset_location = Path("data/IO-datasets/TLCN/MCS_data/2024-05-16_11-55-12/dataset_array_bottom_up.pt") # MCS
-# dataset_location = Path("data/IO-datasets/TLCN/2024-05-15_18-38-44/dataset_array_bottom_up.pt")  # RESTART
+dataset_location = Path("data/IO-datasets_development/TLCN/MCS_data/2024-05-16_11-55-12/dataset_array_bottom_up.pt") # MCS
+# dataset_location = Path("data/IO-datasets_development/TLCN/2024-05-15_18-38-44/dataset_array_bottom_up.pt")  # RESTART
 
 # %% Try opening the dataset. If it fails, try loading it as a numpy array
 try:

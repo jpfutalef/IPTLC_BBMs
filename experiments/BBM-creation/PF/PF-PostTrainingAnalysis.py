@@ -47,7 +47,7 @@ print(f"     Output sim_data shape: {output_size}")
 print(f"     Number of samples: {len(test_dataset)}")
 
 #%% Get the output names
-with open("sim_data/IO-datasets/OPF/2024-03-20_18-55-20/output_names.pkl", "rb") as f:
+with open("sim_data/IO-datasets_development/OPF/2024-03-20_18-55-20/output_names.pkl", "rb") as f:
     output_names = pickle.load(f)
 
 # %% Load the models
