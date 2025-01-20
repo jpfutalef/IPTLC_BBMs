@@ -11,9 +11,8 @@ Author: Juan-Pablo Futalef
 """
 import numpy as np
 import matplotlib.pyplot as plt
-import matplotlib.animation as animation
 
-from greyboxmodels.metrics import lack_of_fit as lof
+from greyboxmodels.voi.metrics import lack_of_fit as lof
 
 #%% Create the data
 time = np.linspace(0, 2, 20)

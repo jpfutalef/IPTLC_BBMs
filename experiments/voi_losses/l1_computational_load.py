@@ -1,7 +1,7 @@
 import os
 from pathlib import Path
 
-from greyboxmodels.metrics import computational_load as cl
+from greyboxmodels.voi.metrics import computational_load as cl
 
 
 # %% Specify paths
