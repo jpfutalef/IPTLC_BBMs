@@ -1,6 +1,6 @@
 def case(pg_loc, cc_loc, tlc_loc):
-    from greyboxmodels.cpsmodels.Plant import Plant
-    from greyboxmodels.cpsmodels.cyberphysical.IPTLC.IPTLC import IPandTLC
+    from greyboxmodels.modelbuild.Plant import Plant
+    from greyboxmodels.models.cyberphysical.IPTLC.IPTLC import IPandTLC
 
     # load the models
     pg = Plant.load(pg_loc)

@@ -1,10 +1,9 @@
 from pathlib import Path
 import numpy as np
-import dill as pickle
 
 import greyboxmodels.scenariogeneration.DeterministicSimulator as simulation
-from greyboxmodels.cpsmodels.Plant import Plant
-from greyboxmodels.cpsmodels.cyberphysical.ControlledPowerGrid import ControlledPowerGrid as CPG
+from greyboxmodels.modelbuild.Plant import Plant
+from greyboxmodels.models.cyberphysical.CPG import ControlledPowerGrid as CPG
 
 # Specify locations
 #plant_location = Path("data/gb-models/cpg/arch1_0-1.pkl")

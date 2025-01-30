@@ -3,9 +3,9 @@ A subclass of ControlCenter that uses a metamodel to approximate the OPF solutio
 
 Author: Juan-Pablo Futalef
 """
-from greyboxmodels.cpsmodels.cyber.ControlCenter import ControlCenter
-from greyboxmodels.cpsmodels.physical.electrical.PowerFlowPowerGrid import PowerGrid
-from greyboxmodels.cpsmodels.cyber.TLCN import TLCNode
+from greyboxmodels.models.cyber import ControlCenter
+from greyboxmodels.models.physical.electrical.PowerGrid import PowerGrid
+from greyboxmodels.models.cyber import TLCNode
 import torch
 import numpy as np
 

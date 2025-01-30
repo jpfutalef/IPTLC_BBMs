@@ -7,11 +7,11 @@ import time
 import copy
 import torch
 
-import greyboxmodels.cpsmodels.cyberphysical.ControlledPowerGrid.cases as cpg_cases
-import greyboxmodels.cpsmodels.physical.electrical.cases as pg_cases
-import greyboxmodels.cpsmodels.physical.electrical.data_utils as pg_data_utils
-import greyboxmodels.cpsmodels.Input as Input
-import greyboxmodels.cpsmodels.cyberphysical.ControlledPowerGrid.ControlledPowerGrid as cpg
+import greyboxmodels.models.cyberphysical.CPG.cases as cpg_cases
+import greyboxmodels.models.physical.electrical.cases as pg_cases
+import greyboxmodels.models.physical.electrical.data_utils as pg_data_utils
+import greyboxmodels.modelbuild.Input as Input
+import greyboxmodels.models.cyberphysical.CPG.ControlledPowerGrid as cpg
 import greyboxmodels.bbmcpsmodels.nn.feedforward_opf as nn_ff
 
 warnings.filterwarnings('ignore')

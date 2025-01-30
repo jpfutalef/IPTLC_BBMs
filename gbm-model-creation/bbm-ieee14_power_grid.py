@@ -54,7 +54,7 @@ def setup_ppnet():
 
 
 def case_normal(mm, n):
-    import greyboxmodels.cpsmodels.physical.electrical.PowerFlowPowerGrid as PG
+    import greyboxmodels.models.physical.electrical.PowerGrid as PG
     # Get the ppnet
     ppnet = setup_ppnet()
 
@@ -65,7 +65,7 @@ def case_normal(mm, n):
 
 
 def case_exponential(mm, n):
-    import greyboxmodels.cpsmodels.physical.electrical.PowerFlowPowerGrid as PG
+    import greyboxmodels.models.physical.electrical.PowerGrid as PG
 
     # Get the ppnet
     ppnet = setup_ppnet()

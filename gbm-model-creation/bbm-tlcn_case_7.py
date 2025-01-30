@@ -11,7 +11,7 @@ def case(e2e_metamodels):
     :return:
     """
     import numpy as np
-    import greyboxmodels.cpsmodels.cyber.TLCN.TLCNetwork as TLCN
+    import greyboxmodels.models.cyber.TLCN.TLCN as TLCN
 
     tlc_adjacency = np.array([[0, 1, 0, 0, 1, 1, 0],
                               [1, 0, 1, 0, 0, 0, 1],

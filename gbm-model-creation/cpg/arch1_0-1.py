@@ -1,6 +1,6 @@
 def case(pg_loc, cc_loc):
-    from greyboxmodels.cpsmodels.Plant import Plant
-    import greyboxmodels.cpsmodels.cyberphysical.ControlledPowerGrid.ControlledPowerGrid as CPG
+    from greyboxmodels.modelbuild.Plant import Plant
+    import greyboxmodels.models.cyberphysical.CPG.ControlledPowerGrid as CPG
 
     # load the models
     pg = Plant.load(pg_loc)

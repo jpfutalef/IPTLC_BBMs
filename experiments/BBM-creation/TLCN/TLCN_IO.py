@@ -15,7 +15,7 @@ import tqdm
 import sys
 import pandas as pd
 
-from greyboxmodels.cpsmodels import Plant
+from greyboxmodels.modelbuild import Plant
 
 #%% Project roots
 scenarios_root = Path(os.environ['SCENARIOGENERATION_ROOT'])
@@ -31,7 +31,7 @@ os.makedirs(destination_folder, exist_ok=True)
 
 #%% Open plant
 plant_file = wbm_root / "data/wbm-models/iptlc_ieee14-deterministic_tlcn7_wbm.pkl"
-plant = Plant.load_plant(plant_file)
+plant = Plant.load(plant_file)
 
 # Get the indices of the columns
 idx_tlcn_bottom_up = plant.state_idx.tlc_network_bottom_up

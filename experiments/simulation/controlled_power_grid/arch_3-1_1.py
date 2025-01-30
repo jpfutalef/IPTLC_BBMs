@@ -1,4 +1,4 @@
-from greyboxmodels.cpsmodels.Plant import Plant
+from greyboxmodels.modelbuild.Plant import Plant
 from greyboxmodels.scenariogeneration.MonteCarlo import MonteCarlo
 from simulation_parameters import *
 

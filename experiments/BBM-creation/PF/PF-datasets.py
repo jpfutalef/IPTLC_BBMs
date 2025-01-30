@@ -9,13 +9,10 @@ Author: Juan-Pablo Futalef
 import os
 from pathlib import Path
 import dill as pickle
-import matplotlib.pyplot as plt
 import numpy as np
-import pandas as pd
 import tqdm
 
-import greyboxmodels.cpsmodels.physical.electrical.PowerFlowPowerGrid as PG
-import greyboxmodels.cpsmodels.Plant as Plant
+import greyboxmodels.modelbuild.Plant as Plant
 
 # Set the working directory
 print(f"Current working directory: {os.getcwd()}")

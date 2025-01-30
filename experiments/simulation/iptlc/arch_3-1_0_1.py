@@ -1,5 +1,5 @@
 # Imports
-from greyboxmodels.cpsmodels.Plant import Plant
+from greyboxmodels.modelbuild.Plant import Plant
 from simulation_parameters import *
 
 #%% Load the plant

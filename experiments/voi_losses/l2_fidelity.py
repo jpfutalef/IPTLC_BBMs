@@ -7,7 +7,7 @@ import pandas as pd
 import tqdm
 import matplotlib.pyplot as plt
 from scipy.integrate import trapezoid, cumulative_trapezoid
-import greyboxmodels.cpsmodels.Plant as Plant
+import greyboxmodels.modelbuild.Plant as Plant
 
 
 def ks_statistic(ecdf_1, ecdf_2):

@@ -7,8 +7,8 @@ Author: Juan-Pablo Futalef
 """
 from pathlib import Path
 
-import greyboxmodels.cpsmodels.cyber.ControlCenter as CC
-import greyboxmodels.cpsmodels.physical.electrical.PowerFlowPowerGrid as PG
+import greyboxmodels.models.cyber.ControlCenter as CC
+import greyboxmodels.models.physical.electrical.PowerGrid as PG
 
 #%% Specify locations of the files
 bbm_dir = Path("data/gbm-model-creation/control_center_bbm.pkl")

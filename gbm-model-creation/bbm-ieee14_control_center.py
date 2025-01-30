@@ -14,8 +14,8 @@ def case(pg_plant_path, metamodel, normalization):
     :param pg_plant_path: the path to the power grid plant
     @return: the control center
     """
-    from greyboxmodels.cpsmodels.Plant import Plant
-    import greyboxmodels.cpsmodels.cyber.ControlCenter as CC
+    from greyboxmodels.modelbuild.Plant import Plant
+    import greyboxmodels.models.cyber.ControlCenter as CC
 
     # Read the power grid plant
     pg_plant = Plant.load(pg_plant_path)
